@@ -17,6 +17,21 @@ $ npm install
 $ react-native link
 ```
 
+- Run (Temporary) Local API for StockList page 
+    - Open new terminal window and CD into `./app/Scripts/`
+    - Run the following 
+    - Note: If there's a problem delete `app.pyc`.
+```
+$ flask run
+```
+
+- Run app depending on which platform you would like
+```
+$ react-native run-ios
+$ react-native run-android
+```
+
+
 ## Introduction
 
 ## Features
