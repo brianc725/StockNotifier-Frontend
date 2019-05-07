@@ -8,7 +8,7 @@
 
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
-import Login from './app/Screens/Login';
+import Login from './app/Screens/Login/Login';
 import StockList from './app/Screens/StockList';
 
 const instructions = Platform.select({
