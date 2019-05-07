@@ -26,13 +26,25 @@ export default styles = StyleSheet.create({
     color: 'rgba(0,0,0,0.7)'
   },
   buttonContainer: {
-      backgroundColor: '#2980b6',
-      padding: 15,
-      width: 300
+    backgroundColor: '#2980b6',
+    padding: 15,
+    marginTop: 15,
+    width: 300
   },
   buttonText: {
-      color: '#fff',
-      textAlign: 'center',
-      fontWeight: '700'
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: '700'
+  },
+  secondaryButtonContainer: {
+    backgroundColor: '#DEDFE5',
+    padding: 15,
+    marginTop: 15,
+    width: 300
+  },
+  secondaryButtonText: {
+    color: '#434345',
+    textAlign: 'center',
+    fontWeight: '700'
   }
 });

@@ -4,8 +4,15 @@ import {
   StatusBar
 } from 'react-native';
 import styles from '../styles';
+import { saveSignIn } from '../auth';
 
 export default class LoginForm extends Component {
+
+  onSignIn = () => {
+    saveSignIn();
+    this.props.navigation.navigate('App');
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -26,10 +33,9 @@ export default class LoginForm extends Component {
                       secureTextEntry/>
 
         <TouchableOpacity style={styles.buttonContainer} 
-                            // onPress={onButtonPress}>
-                            >
-                    <Text  style={styles.buttonText}>LOGIN</Text>
-        </TouchableOpacity> 
+                            onPress={this.onSignIn}>
+                    <Text  style={styles.buttonText}>LOG IN</Text>
+        </TouchableOpacity>
       </View>
     );
   }
