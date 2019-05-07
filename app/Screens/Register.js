@@ -9,9 +9,9 @@ export default class Register extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Login</Text>
+        <Text style={styles.welcome}>Register</Text>
         <View style={styles.formContainer}>
-          <RegisterForm />
+          <RegisterForm navigation={this.props.navigation}/>
         </View>
       </View>
     );

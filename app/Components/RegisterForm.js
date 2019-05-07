@@ -32,10 +32,12 @@ export default class RegisterForm extends Component {
                       placeholderTextColor='rgba(0,0,0,0.5)'
                       secureTextEntry/>
 
-        <TouchableOpacity style={styles.buttonContainer} 
-                            // onPress={onButtonPress}>
-                            >
-                    <Text  style={styles.buttonText}>REGISTER</Text>
+        <TouchableOpacity style={styles.buttonContainer}>
+                  <Text  style={styles.buttonText}>REGISTER</Text>
+        </TouchableOpacity> 
+        <TouchableOpacity style={styles.secondaryButtonContainer}
+                          onPress={() => this.props.navigation.navigate('Login')}>
+                  <Text  style={styles.secondaryButtonText}>GO TO LOGIN</Text>
         </TouchableOpacity> 
       </View>
     );

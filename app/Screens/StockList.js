@@ -7,7 +7,8 @@ import TickerCard from '../Components/TickerCard';
 // TODO: Remove Header so that there is no back button when navigating from 
 //       Login page.
 
-const API_URL = "http://localhost:5000/tickers"
+// const API_URL = "http://localhost:5000/tickers"
+const API_URL = "http://10.0.2.2:5000/tickers"  // for android simulator
 
 export default class StockList extends Component {
   constructor(props) {
