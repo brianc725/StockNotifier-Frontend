@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   Text, View, TouchableOpacity, Alert, StyleSheet
 } from 'react-native';
+import LoginForm from './LoginForm'
 
 export default class Login extends Component {
   render() {
@@ -9,6 +10,9 @@ export default class Login extends Component {
       <View style={styles.container}>
         <Text style={styles.welcome}>Login Page!</Text>
         <Text style={styles.instructions}>To get started, edit Login.js</Text>
+        <View style={styles.formContainer}>
+          <LoginForm />
+        </View>
       </View>
     );
   }
