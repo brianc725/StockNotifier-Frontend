@@ -3,6 +3,7 @@ import {
   Text, View, TextInput, TouchableOpacity, Alert, Button, StyleSheet,
   StatusBar
 } from 'react-native';
+import styles from '../styles';
 
 export default class LoginForm extends Component {
   render() {
@@ -33,30 +34,3 @@ export default class LoginForm extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  input:{
-    height: 40,
-    width: 300,
-    backgroundColor: 'rgba(225,225,225,0.2)',
-    marginBottom: 10,
-    padding: 10,
-    color: 'rgba(0,0,0,0.7)'
-  },
-  buttonContainer:{
-      backgroundColor: '#2980b6',
-      padding: 15,
-      width: 300
-  },
-  buttonText:{
-      color: '#fff',
-      textAlign: 'center',
-      fontWeight: '700'
-  }
-});
