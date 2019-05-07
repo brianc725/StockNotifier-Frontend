@@ -54,6 +54,7 @@ export default class StockList extends Component {
       );
     }
 
+    // TODO: Maybe have a filter option to sort by A-Z, sort by price, etc.
     return (
       <View style={styles.container}>
         <FlatList
@@ -75,17 +76,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#000',
     marginTop: headerHeight,
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+    top: 0,
+    bottom: 0,
   },
 });
