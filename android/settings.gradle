@@ -1,0 +1,3 @@
+rootProject.name = 'StockNotifier'
+
+include ':app'
