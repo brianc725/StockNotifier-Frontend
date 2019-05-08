@@ -1,22 +1,26 @@
 import {
   createSwitchNavigator,
-  createAnimatedStackNavigator,
+  createStackNavigator,
   createAppContainer
 } from 'react-navigation';
 import Login from './Screens/Login';
 import Register from './Screens/Register';
 import StockList from './Screens/StockList';
+import AuthLoading from './Screens/AuthLoading';
+import TestSignout from './Screens/TestSignout';
 
 const AppStack = createStackNavigator(
   {
-    StockList: StockList
+    StockList: StockList,
+    TestSignout: TestSignout,
   },
   {
-    initialRouteName: 'StockList'
+    // initialRouteName: 'StockList'
+    initialRouteName: 'TestSignout'
   }
 );
 
-const AuthStack = createAnimatedStackNavigator(
+const AuthStack = createStackNavigator(
   {
     Register: Register,
     Login: Login
@@ -29,9 +33,10 @@ const AuthStack = createAnimatedStackNavigator(
 export default Navigator = createAppContainer(createSwitchNavigator(
   {
     App: AppStack,
-    Auth: AuthStack
+    Auth: AuthStack,
+    AuthLoading: AuthLoading
   },
   {
-    initialRouteName: 'Auth'
+    initialRouteName: 'AuthLoading'
   }
 ));
