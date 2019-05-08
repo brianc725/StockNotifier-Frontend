@@ -11,7 +11,7 @@ import {Platform, StyleSheet, Text, View} from 'react-native';
 import Login from './app/Screens/Login';
 import StockList from './app/Screens/StockList';
 import Register from './app/Screens/Register';
-import { Authenticator } from './app/router';
+import { Navigator } from './app/Navigator';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -29,7 +29,7 @@ export default class App extends Component<Props> {
       // <StockList></StockList>
       // <SignedOut></SignedOut>
       // <SignedIn/>
-      <Authenticator/>
+      <Navigator/>
     );
   }
 }
