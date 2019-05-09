@@ -35,9 +35,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width,
     height: height / 8,
-    backgroundColor: 'white',
+    backgroundColor: '#E8E9FF',
     paddingLeft: 15,
     paddingRight: 15,
+    borderColor: '#D0CDD7',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
   },
   nameText: {
     fontSize: 12,
