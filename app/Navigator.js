@@ -1,22 +1,24 @@
 import {
   createSwitchNavigator,
   createStackNavigator,
+  createDrawerNavigator,
   createAppContainer
 } from 'react-navigation';
 import Login from './Screens/Login';
 import Register from './Screens/Register';
 import StockList from './Screens/StockList';
 import AuthLoading from './Screens/AuthLoading';
-import TestSignout from './Screens/TestSignout';
+import DrawerSignout from './Components/DrawerSignout';
+import ManageTickers from './Screens/ManageTickers';
 
-const AppStack = createStackNavigator(
+const AppStack = createDrawerNavigator(
   {
     StockList: StockList,
-    TestSignout: TestSignout,
+    ManageTickers: ManageTickers
   },
   {
-    // initialRouteName: 'StockList'
-    initialRouteName: 'TestSignout'
+    contentComponent: DrawerSignout,
+    initialRouteName: 'StockList',
   }
 );
 

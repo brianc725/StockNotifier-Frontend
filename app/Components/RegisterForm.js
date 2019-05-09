@@ -3,7 +3,7 @@ import {
   Text, View, TextInput, TouchableOpacity
 } from 'react-native';
 import styles from '../styles';
-import Button from '../Components/Button';
+import Button from './PrimaryButton';
 import DisabledButton from '../Components/DisabledButton';
 
 export default class RegisterForm extends Component {
@@ -53,7 +53,7 @@ export default class RegisterForm extends Component {
     if (disableRegisterButton) {
       registerButton = <DisabledButton>REGISTER</DisabledButton>
     } else {
-      registerButton = <Button>REGISTER</Button>
+      registerButton = <PrimaryButton>REGISTER</PrimaryButton>
     }
 
     return (

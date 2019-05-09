@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import styles from '../styles'
 
-export default class Button extends Component {
+export default class PrimaryButton extends Component {
   render() {
     return (
       <TouchableOpacity style={styles.buttonContainer} 

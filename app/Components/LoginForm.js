@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import styles from '../styles';
 import { saveSignIn } from '../auth';
-import Button from '../Components/Button';
+import PrimaryButton from './PrimaryButton';
 import DisabledButton from '../Components/DisabledButton';
 
 export default class LoginForm extends Component {
@@ -38,7 +38,7 @@ export default class LoginForm extends Component {
     if (emptyInput.username || emptyInput.password) {
       button = <DisabledButton>LOG IN</DisabledButton>
     } else {
-      button = <Button onPress={this.onSignIn}>LOG IN</Button>
+      button = <PrimaryButton onPress={this.onSignIn}>LOG IN</PrimaryButton>
     }
 
     return (
