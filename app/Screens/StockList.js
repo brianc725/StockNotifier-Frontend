@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Text, View, TouchableOpacity, FlatList, StyleSheet, Dimensions
+  Text, View, TouchableOpacity, FlatList, StyleSheet, Dimensions, ActivityIndicator
 } from 'react-native';
 import TickerCard from '../Components/TickerCard';
 
@@ -26,7 +26,7 @@ export default class StockList extends Component {
       .then((response) => {return response.json();})
       .then((data) => {
         temp = data;
-        // Currently data is returned in tickers 
+        // Currently data is returned in 'tickers'
         this.setState({ticker_data: temp.tickers});
       })
       .catch((error) => {console.log(error);});
@@ -37,12 +37,11 @@ export default class StockList extends Component {
   render() {  
     let { ticker_data } = this.state
 
-    // TODO: Convert this Text to the Animation 
-    // https://facebook.github.io/react-native/docs/activityindicator
     if (ticker_data === undefined) {
       return(
         <View style={styles.container}>
-          <Text style={styles.welcome}>Attempting to get ticker data...</Text>
+          <Text style={styles.infoText}>Attempting to get ticker data...</Text>
+          <ActivityIndicator size="large" color="#0000ff" />
         </View>
       );
     }
@@ -50,7 +49,7 @@ export default class StockList extends Component {
     if (ticker_data.length === 0){
       return(
         <View style={styles.container}>
-          <Text style={styles.welcome}>No tickers added yet</Text>
+          <Text style={styles.infoText}>No tickers added yet</Text>
         </View>
       );
     }
@@ -77,9 +76,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#000',
+    backgroundColor: '#fff',
     marginTop: headerHeight,
     top: 0,
     bottom: 0,
+  },
+  infoText: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
   },
 });
