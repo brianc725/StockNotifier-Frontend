@@ -1,41 +1,68 @@
 import React, { Component } from 'react';
 import {
-  Text, View, TextInput, TouchableOpacity, Alert, Button, StyleSheet,
-  StatusBar
+  Text, View, TextInput, TouchableOpacity
 } from 'react-native';
 import styles from '../styles';
 import { saveSignIn } from '../auth';
+import Button from '../Components/Button';
+import DisabledButton from '../Components/DisabledButton';
 
 export default class LoginForm extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: undefined,
+      password: undefined
+    };
+    this.onSignIn = this.onSignIn.bind(this);
+  }
 
   onSignIn = () => {
     saveSignIn();
     this.props.navigation.navigate('App');
   }
 
+  validate(username, password) {
+    // true if empty
+    return {
+      username: !username || username.length === 0,
+      password: !password || password.length === 0,
+    };
+  }
+
   render() {
+    const emptyInput = this.validate(this.state.username, this.state.password)
+
+    let button;
+    if (emptyInput.username || emptyInput.password) {
+      button = <DisabledButton>LOG IN</DisabledButton>
+    } else {
+      button = <Button onPress={this.onSignIn}>LOG IN</Button>
+    }
+
     return (
       <View style={styles.container}>
-        <TextInput style = {styles.input} 
-               autoCapitalize="none" 
-               onSubmitEditing={() => this.passwordInput.focus()} 
-               autoCorrect={false} 
-               keyboardType='email-address' 
-               returnKeyType="next" 
-               placeholder='Username'
-               placeholderTextColor='rgba(0,0,0,0.5)'/>
+        <TextInput style={styles.input} 
+          autoCapitalize="none" 
+          onSubmitEditing={() => this.passwordInput.focus()}
+          onChangeText={(text) => this.setState({username: text})}
+          autoCorrect={false} 
+          keyboardType='email-address' 
+          returnKeyType="next" 
+          placeholder='Username'
+          placeholderTextColor='rgba(0,0,0,0.5)'/>
 
-        <TextInput style = {styles.input}   
-                      returnKeyType="go" 
-                      ref={(input)=> this.passwordInput = input} 
-                      placeholder='Password'
-                      placeholderTextColor='rgba(0,0,0,0.5)'
-                      secureTextEntry/>
+        <TextInput style={styles.input}   
+          returnKeyType="go" 
+          onChangeText={(text) => this.setState({password: text})}
+          ref={(input)=> this.passwordInput = input}
+          placeholder='Password'
+          placeholderTextColor='rgba(0,0,0,0.5)'
+          secureTextEntry/>
 
-        <TouchableOpacity style={styles.buttonContainer} 
-                            onPress={this.onSignIn}>
-                    <Text  style={styles.buttonText}>LOG IN</Text>
-        </TouchableOpacity>
+        {button}
+        
       </View>
     );
   }
