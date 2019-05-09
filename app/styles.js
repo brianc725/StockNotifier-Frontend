@@ -25,8 +25,24 @@ export default styles = StyleSheet.create({
     padding: 10,
     color: 'rgba(0,0,0,0.7)'
   },
+  badInput: {
+    height: 40,
+    width: 300,
+    backgroundColor: 'rgba(225,225,225,0.2)',
+    marginBottom: 10,
+    padding: 10,
+    color: 'rgba(0,0,0,0.7)',
+    borderWidth: 1,
+    borderColor: 'red'
+  },
   buttonContainer: {
     backgroundColor: '#2980b6',
+    padding: 15,
+    marginTop: 15,
+    width: 300
+  },
+  buttonDisabledContainer: {
+    backgroundColor: '#b9d4e5',
     padding: 15,
     marginTop: 15,
     width: 300
