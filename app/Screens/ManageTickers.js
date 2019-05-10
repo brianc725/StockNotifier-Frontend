@@ -22,7 +22,7 @@ export default class ManageTickers extends Component {
           color: '#fff', 
           onPress: () => this.props.navigation.openDrawer(), 
         }}
-        centerComponent={{ text: 'Manage Stocks', style: { color: '#fff' } }}
+        centerComponent={{ text: 'Manage Tickers', style: { color: '#fff' } }}
         rightComponent={{ 
           icon: 'refresh', 
           color: '#fff',
@@ -32,7 +32,6 @@ export default class ManageTickers extends Component {
           backgroundColor: '#5E8D93',
         }}
         />
-        <Text style={styles.welcome}>Manage Stocks</Text>
         {/* TODO: Make these buttons??? */}
         <Text style={styles.welcome}>Add Stocks</Text>
         <Text style={styles.welcome}>Remove Stocks</Text>
@@ -45,8 +44,8 @@ const localStyles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
-    // alignItems: 'center',
+    // justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#5E8D93',
     top: 0,
     bottom: 0,
