@@ -3,9 +3,11 @@ import {
   Text, View, TouchableOpacity, FlatList, StyleSheet, Dimensions, ActivityIndicator, Alert
 } from 'react-native';
 import TickerCard from '../Components/TickerCard';
+import {contains} from '../Scripts/Search';
 import PrimaryButton from '../Components/PrimaryButton';
 import { SafeAreaView } from 'react-navigation';
 import { Header, SearchBar } from 'react-native-elements'
+import _ from 'lodash';
 
 const API_URL = "http://localhost:5000/tickers"
 // const API_URL = "http://10.0.2.2:5000/tickers"  // for android simulator
@@ -16,6 +18,7 @@ export default class StockList extends Component {
     this.state = {
       ticker_data: undefined,
       search: "",
+      // all of the data received by the api call for "restoring" after search filtering
       full_ticker_data: [],
     };
   }
@@ -41,6 +44,7 @@ export default class StockList extends Component {
         // Currently data is returned in 'tickers'
         this.setState({
           ticker_data: temp.tickers,
+          full_ticker_data: temp.tickers,
         });
       })
       .catch((error) => { console.log(error); });
@@ -51,7 +55,12 @@ export default class StockList extends Component {
   // Save the current query string from the user 
   handleSearch = search => {
     // console.log("search", search)
-    this.setState({ search });
+    const formatSearch = search.toLowerCase();
+    // Filter for results via contain function
+    const ticker_data = _.filter(this.state.full_ticker_data, item => {
+      return contains(item, formatSearch);
+    });
+    this.setState({ search: formatSearch, ticker_data });
   }
 
   render() {
@@ -66,8 +75,8 @@ export default class StockList extends Component {
         </SafeAreaView>
       );
     }
-
-    else if (ticker_data.length === 0) {
+    // This is for no tickers. Differentiate from no search results.
+    else if (ticker_data.length === 0 && search.length == 0) {
       return (
         <SafeAreaView style={styles.loading}>
           <Text style={styles.infoText}>No tickers added yet.</Text>
@@ -102,7 +111,7 @@ export default class StockList extends Component {
               <TickerCard id={item.id} name={item.name} price={item.price} />}
             keyExtractor={this._keyExtractor}
             ListHeaderComponent={<SearchBar placeholder="Search Followed Stocks..." lightTheme round onChangeText={this.handleSearch} value={search} />}
-            ListFooterComponent={<Text style={styles.footerText}>Following {this.state.ticker_data.length} stocks</Text>}
+            ListFooterComponent={<Text style={styles.footerText}>Viewing {this.state.ticker_data.length} stocks</Text>}
           />
         </View>
       );
@@ -117,7 +126,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
     backgroundColor: '#5E8D93',
     top: 0,
     bottom: 0,
