@@ -26,7 +26,6 @@ const headerHeight = 80;
 
 const styles = StyleSheet.create({
   card: {
-    marginTop: 5,
     marginBottom: 5,
     paddingTop: 10,
     paddingBottom: 10,

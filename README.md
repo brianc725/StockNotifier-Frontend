@@ -15,6 +15,7 @@ $ npm install
 
 ```
 $ react-native link
+$ react-native link react-native-vector-icons
 ```
 
 - Run (Temporary) Local API for StockList page 
