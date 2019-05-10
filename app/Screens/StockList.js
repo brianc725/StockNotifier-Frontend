@@ -89,11 +89,14 @@ export default class StockList extends Component {
           backgroundColor: '#5E8D93',
         }}
         />
+        
         <FlatList
           data={this.state.ticker_data}
           renderItem={({ item }) =>
             <TickerCard id={item.id} name={item.name} price={item.price} />}
           keyExtractor={this._keyExtractor}
+          ListHeaderComponent={<SearchBar placeholder="Type Here..." lightTheme round />}
+          ListFooterComponent={<Text style={styles.footerText}>Following {this.state.ticker_data.length} stocks</Text>}
         />
       </View>
     );
@@ -111,6 +114,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#5E8D93',
     top: 0,
     bottom: 0,
+    paddingBottom: 10,
   },
   loading: {
     flex: 1,
@@ -124,4 +128,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 10,
   },
+  footerText: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 15,
+    color: 'white'
+  }
 });
