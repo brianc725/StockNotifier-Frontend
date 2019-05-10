@@ -33,6 +33,9 @@ export default class ManageTickers extends Component {
         }}
         />
         <Text style={styles.welcome}>Manage Stocks</Text>
+        {/* TODO: Make these buttons??? */}
+        <Text style={styles.welcome}>Add Stocks</Text>
+        <Text style={styles.welcome}>Remove Stocks</Text>
       </View>
     );
   }
