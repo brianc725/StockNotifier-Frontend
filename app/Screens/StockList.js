@@ -26,6 +26,12 @@ export default class StockList extends Component {
   };
 
   async componentDidMount() {
+    this.grabData()
+  }
+
+  // Function queries the DB via API URL to return tickers that user is 
+  // following 
+  async grabData() {
     let temp;
 
     // Fetch the data from the API 
@@ -46,10 +52,10 @@ export default class StockList extends Component {
 
     if (ticker_data === undefined) {
       return (
-        // TODO: refresh every 5 seconds until it can connect
         <SafeAreaView style={styles.loading}>
           <Text style={styles.infoText}>Attempting to get ticker data...</Text>
           <ActivityIndicator size="large" color="#0000ff" />
+          <PrimaryButton onPress={() => this.grabData()}>Refresh Now</PrimaryButton>
         </SafeAreaView>
       );
     }
@@ -77,7 +83,7 @@ export default class StockList extends Component {
         rightComponent={{ 
           icon: 'refresh', 
           color: '#fff',
-          onPress: () => Alert.alert('Refresh has not been implemented yet!'),
+          onPress: () => this.grabData(),
         }}
         containerStyle={{
           backgroundColor: '#5E8D93',
