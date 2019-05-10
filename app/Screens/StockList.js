@@ -3,6 +3,7 @@ import {
   Text, View, TouchableOpacity, FlatList, StyleSheet, Dimensions, ActivityIndicator, Alert
 } from 'react-native';
 import TickerCard from '../Components/TickerCard';
+import PrimaryButton from '../Components/PrimaryButton';
 import { SafeAreaView } from 'react-navigation';
 import { Header, SearchBar } from 'react-native-elements'
 
@@ -42,11 +43,11 @@ export default class StockList extends Component {
 
   render() {
     let { ticker_data } = this.state
-    const { search } = this.state;
 
     if (ticker_data === undefined) {
       return (
-        <SafeAreaView style={styles.container}>
+        // TODO: refresh every 5 seconds until it can connect
+        <SafeAreaView style={styles.loading}>
           <Text style={styles.infoText}>Attempting to get ticker data...</Text>
           <ActivityIndicator size="large" color="#0000ff" />
         </SafeAreaView>
@@ -55,8 +56,10 @@ export default class StockList extends Component {
 
     if (ticker_data.length === 0) {
       return (
-        <SafeAreaView style={styles.container}>
-          <Text style={styles.infoText}>No tickers added yet</Text>
+        <SafeAreaView style={styles.loading}>
+          <Text style={styles.infoText}>No tickers added yet.</Text>
+          {/* Takes you to manage tickers page right away  */}
+          <PrimaryButton onPress={() => this.props.navigation.navigate('ManageTickers')}>Manage Stock List</PrimaryButton>
         </SafeAreaView>
       );
     }
@@ -98,10 +101,17 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    // alignItems: 'center',
+    alignItems: 'center',
     backgroundColor: '#5E8D93',
     top: 0,
     bottom: 0,
+  },
+  loading: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white'
   },
   infoText: {
     fontSize: 20,
