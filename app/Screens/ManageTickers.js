@@ -22,7 +22,7 @@ export default class ManageTickers extends Component {
           color: '#fff', 
           onPress: () => this.props.navigation.openDrawer(), 
         }}
-        centerComponent={{ text: 'Following Stocks', style: { color: '#fff' } }}
+        centerComponent={{ text: 'Manage Stocks', style: { color: '#fff' } }}
         rightComponent={{ 
           icon: 'refresh', 
           color: '#fff',
