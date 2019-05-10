@@ -3,7 +3,7 @@
 export const contains = ({id, name}, search) => {
     const idLower = id.toLowerCase();
     const nameLower = name.toLowerCase();
-    if (idLower.includes(search) || nameLower.includes(search)) {
+    if (idLower.startsWith(search) || nameLower.startsWith(search)) {
         return true;
     }
     return false;

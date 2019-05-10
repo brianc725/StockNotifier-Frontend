@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Text, View, TouchableOpacity, FlatList, StyleSheet, Dimensions, ActivityIndicator, Alert
+  Text, View, TouchableOpacity, FlatList, StyleSheet, Dimensions, ActivityIndicator, Alert, Platform
 } from 'react-native';
 import TickerCard from '../Components/TickerCard';
 import {contains} from '../Scripts/Search';
@@ -9,8 +9,7 @@ import { SafeAreaView } from 'react-navigation';
 import { Header, SearchBar } from 'react-native-elements'
 import _ from 'lodash';
 
-const API_URL = "http://localhost:5000/tickers"
-// const API_URL = "http://10.0.2.2:5000/tickers"  // for android simulator
+const API_URL = Platform.OS == 'ios' ? "http://localhost:5000/tickers" : "http://10.0.2.2:5000/tickers"
 
 export default class StockList extends Component {
   constructor(props) {
