@@ -1,5 +1,11 @@
 import { StyleSheet } from 'react-native';
 
+export const COLOR_BG = '#F8FFF4'
+export const COLOR_BG_ALT = '#FFFBFE'
+export const COLOR_PRIMARY = '#416165'
+export const COLOR_SECONDARY = '#223843'
+export const COLOR_TEXT = '#04151F'
+
 export default styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -12,11 +18,11 @@ export default styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 100,
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+  // instructions: {
+  //   textAlign: 'center',
+  //   color: '#333333',
+  //   marginBottom: 5,
+  // },
   input: {
     height: 40,
     width: 300,

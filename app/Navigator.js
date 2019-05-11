@@ -1,8 +1,8 @@
 import {
   createSwitchNavigator,
-  createStackNavigator,
   createDrawerNavigator,
-  createAppContainer
+  createAppContainer,
+  createBottomTabNavigator
 } from 'react-navigation';
 import Login from './Screens/Login';
 import Register from './Screens/Register';
@@ -11,7 +11,7 @@ import AuthLoading from './Screens/AuthLoading';
 import DrawerSignout from './Components/DrawerSignout';
 import ManageTickers from './Screens/ManageTickers';
 
-const AppStack = createDrawerNavigator(
+const AppScreens = createDrawerNavigator(
   {
     StockList: StockList,
     ManageTickers: ManageTickers
@@ -22,20 +22,33 @@ const AppStack = createDrawerNavigator(
   }
 );
 
-const AuthStack = createStackNavigator(
+const AuthScreens = createBottomTabNavigator(
   {
-    Register: Register,
-    Login: Login
+    Register: {
+      screen: Register,
+      navigationOptions: {
+        tabBarLabel: 'Sign Up'
+      }
+    },
+    Login: {
+      screen: Login,
+      navigationOptions: {
+        tabBarLabel: 'Sign In'
+      }
+    },
   },
   {
-    initialRouteName: 'Register'
+    initialRouteName: 'Register',
+    defaultNavigationOptions: {
+      header: null,
+    }
   }
 );
 
 export default Navigator = createAppContainer(createSwitchNavigator(
   {
-    App: AppStack,
-    Auth: AuthStack,
+    App: AppScreens,
+    Auth: AuthScreens,
     AuthLoading: AuthLoading
   },
   {

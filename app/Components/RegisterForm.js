@@ -90,11 +90,7 @@ export default class RegisterForm extends Component {
           secureTextEntry/>
 
         {registerButton}
-
-        <TouchableOpacity style={styles.secondaryButtonContainer}
-          onPress={() => this.props.navigation.navigate('Login')}>
-          <Text style={styles.secondaryButtonText}>GO TO LOGIN</Text>
-        </TouchableOpacity>
+        
       </View>
     );
   }
