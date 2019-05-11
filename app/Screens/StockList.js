@@ -3,7 +3,7 @@ import {
   Text, View, TouchableOpacity, FlatList, StyleSheet, Dimensions, ActivityIndicator, Alert, Platform
 } from 'react-native';
 import TickerCard from '../Components/TickerCard';
-import {contains} from '../Scripts/Search';
+import { contains } from '../Scripts/Search';
 import PrimaryButton from '../Components/PrimaryButton';
 import { SafeAreaView } from 'react-navigation';
 import { Header, SearchBar } from 'react-native-elements'
@@ -110,7 +110,14 @@ export default class StockList extends Component {
               <TickerCard id={item.id} name={item.name} price={item.price} />}
             keyExtractor={this._keyExtractor}
             ListHeaderComponent={<SearchBar placeholder="Search Followed Stocks..." lightTheme round onChangeText={this.handleSearch} value={search} />}
-            ListFooterComponent={<Text style={styles.footerText}>Viewing {this.state.ticker_data.length} stocks</Text>}
+            ListFooterComponent={
+              // Grammatical fix for 1 stock result only 
+              this.state.ticker_data.length == 1
+                ?
+                <Text style={styles.footerText}>Viewing {this.state.ticker_data.length} stock</Text>
+                :
+                <Text style={styles.footerText}>Viewing {this.state.ticker_data.length} stocks</Text>
+            }
           />
         </View>
       );
