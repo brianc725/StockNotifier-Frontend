@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "463019318717",
+    "firebase_url": "https://stock-price-notifier-881ac.firebaseio.com",
+    "project_id": "stock-price-notifier-881ac",
+    "storage_bucket": "stock-price-notifier-881ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:463019318717:android:d166c2cb59dc7a29",
+        "android_client_info": {
+          "package_name": "com.cs130.stockpricenotifier"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "463019318717-ocer9u1fvqenlo3bq3l718ts7ohb0f8m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFcPRirKto9W82AmchV06s3-5c5CDiOFk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "463019318717-ocer9u1fvqenlo3bq3l718ts7ohb0f8m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:463019318717:android:d90bcf07cd3c3598",
+        "android_client_info": {
+          "package_name": "com.stocknotifier"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "463019318717-ocer9u1fvqenlo3bq3l718ts7ohb0f8m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFcPRirKto9W82AmchV06s3-5c5CDiOFk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "463019318717-ocer9u1fvqenlo3bq3l718ts7ohb0f8m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
