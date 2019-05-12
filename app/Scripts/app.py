@@ -25,7 +25,7 @@ tickers = [
     },
     {
         'id': u'DAL',
-        'name': u'Delta Air lines, Inc.',
+        'name': u'Delta Air Lines, Inc.',
         'price': u'57.73',
     },
     {
@@ -45,9 +45,48 @@ tickers = [
     },
 ]
 
+nyse = [
+    {
+        'id': u'AAPL',
+        'name': u'APPLE INC',
+    },
+    {
+        'id': u'MSFT',
+        'name': u'Microsoft Corporation',
+    },
+    {
+        'id': u'LB',
+        'name': u'L Brands, Inc.',
+    },
+    {
+        'id': u'UBER',
+        'name': u'Uber Technologies, Inc.',
+    },
+    {
+        'id': u'FB',
+        'name': u'Facebook, Inc.',
+    },
+    {
+        'id': u'TWTR',
+        'name': u'Twitter, Inc.',
+    },
+    {
+        'id': u'HD',
+        'name': u'The Home Depot, Inc.',
+    },
+    {
+        'id': u'MGM',
+        'name': u'MGM Resorts International',
+    },
+]
+
 @app.route('/tickers', methods=['GET'])
-def get_tasks():
+def get_tickers():
     return jsonify({'tickers': tickers})
+
+@app.route('/nyse', methods=['GET'])
+def all_nyse():
+    return jsonify({'nyse': nyse})    
 
 if __name__ == '__main__':
     app.run()

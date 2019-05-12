@@ -10,12 +10,12 @@ import StockList from './Screens/StockList';
 import AuthLoading from './Screens/AuthLoading';
 import About from './Screens/About';
 import DrawerSignout from './Components/DrawerSignout';
-import ManageTickers from './Screens/ManageTickers';
+// import ManageTickers from './Screens/ManageTickers';
 
 const AppStack = createDrawerNavigator(
   {
     StockList: StockList,
-    ManageTickers: ManageTickers, 
+    // ManageTickers: ManageTickers, 
     About: About,  
   },
   {

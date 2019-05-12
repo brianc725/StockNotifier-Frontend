@@ -6,10 +6,13 @@ import TickerCard from '../Components/TickerCard';
 import { contains } from '../Scripts/Search';
 import PrimaryButton from '../Components/PrimaryButton';
 import { SafeAreaView } from 'react-navigation';
-import { Header, SearchBar } from 'react-native-elements'
+import { Header, SearchBar, Button } from 'react-native-elements'
+import Ionicon from 'react-native-vector-icons/Ionicons';
 import _ from 'lodash';
+import { whileStatement } from '@babel/types';
 
 const API_URL = Platform.OS == 'ios' ? "http://localhost:5000/tickers" : "http://10.0.2.2:5000/tickers"
+const NYSE_URL = Platform.OS == 'ios' ? "http://localhost:5000/nyse" : "http://10.0.2.2:5000/nyse"
 
 export default class StockList extends Component {
   constructor(props) {
@@ -19,6 +22,7 @@ export default class StockList extends Component {
       search: "",
       // all of the data received by the api call for "restoring" after search filtering
       full_ticker_data: [],
+      lastUpdated: undefined,
     };
   }
 
@@ -40,10 +44,15 @@ export default class StockList extends Component {
       .then((response) => { return response.json(); })
       .then((data) => {
         temp = data;
+
+        // Get last synced time 
+        const time = new Date().toLocaleString();
+
         // Currently data is returned in 'tickers'
         this.setState({
           ticker_data: temp.tickers,
           full_ticker_data: temp.tickers,
+          lastUpdated: time,
         });
       })
       .catch((error) => { console.log(error); });
@@ -63,7 +72,24 @@ export default class StockList extends Component {
   }
 
   render() {
-    let { ticker_data, search } = this.state
+    let { ticker_data, search, lastUpdated } = this.state
+
+    const header = <Header
+      leftComponent={{
+        icon: 'menu',
+        color: '#fff',
+        onPress: () => this.props.navigation.openDrawer(),
+      }}
+      centerComponent={{ text: 'Following Stocks', style: { color: '#fff' } }}
+      rightComponent={{
+        icon: 'refresh',
+        color: '#fff',
+        onPress: () => this.grabData(),
+      }}
+      containerStyle={{
+        backgroundColor: '#5E8D93',
+      }}
+    />
 
     if (ticker_data === undefined) {
       return (
@@ -74,49 +100,47 @@ export default class StockList extends Component {
         </SafeAreaView>
       );
     }
-    // This is for no tickers. Differentiate from no search results.
-    else if (ticker_data.length === 0 && search.length == 0) {
-      return (
-        <SafeAreaView style={styles.loading}>
-          <Text style={styles.infoText}>No tickers added yet.</Text>
-          {/* Takes you to manage tickers page right away  */}
-          <PrimaryButton onPress={() => this.props.navigation.navigate('ManageTickers')}>Manage Stock List</PrimaryButton>
-        </SafeAreaView>
-      );
-    }
+
     else {
       // TODO: Maybe have a filter option to sort by A-Z, sort by price, etc.
+      const timeStamp = <Text style={styles.footerText}>Last updated: {lastUpdated}</Text>
+
       return (
         <View style={styles.container}>
-          <Header
-            leftComponent={{
-              icon: 'menu',
-              color: '#fff',
-              onPress: () => this.props.navigation.openDrawer(),
-            }}
-            centerComponent={{ text: 'Following Stocks', style: { color: '#fff' } }}
-            rightComponent={{
-              icon: 'refresh',
-              color: '#fff',
-              onPress: () => this.grabData(),
-            }}
-            containerStyle={{
-              backgroundColor: '#5E8D93',
-            }}
-          />
+          {header}
           <FlatList
             data={this.state.ticker_data}
             renderItem={({ item }) =>
               <TickerCard id={item.id} name={item.name} price={item.price} />}
             keyExtractor={this._keyExtractor}
-            ListHeaderComponent={<SearchBar placeholder="Search Followed Stocks..." lightTheme round onChangeText={this.handleSearch} value={search} />}
+            ListHeaderComponent={
+              <View>
+                <SearchBar style={styles.search} placeholder="Search Followed Stocks..." lightTheme round onChangeText={this.handleSearch} value={search} />
+                <View style={styles.row}>
+                {/* TODO: Touchable Opacity these two! */}
+                  <Text style={styles.addText}>+ Add Symbol</Text>
+                  <Ionicon color="white" name="ios-funnel" size={25} />
+                </View>
+              </View>
+            }
+            ListEmptyComponent={
+              <TouchableOpacity onPress={() => Alert.alert('not implemented yet!')}>
+                <Text style={styles.emptyAdd}>Add first stock!</Text>
+              </TouchableOpacity>
+            }
             ListFooterComponent={
               // Grammatical fix for 1 stock result only 
               this.state.ticker_data.length == 1
                 ?
-                <Text style={styles.footerText}>Viewing {this.state.ticker_data.length} stock</Text>
+                <View>
+                  <Text style={styles.footerText}>Viewing {this.state.ticker_data.length} stock</Text>
+                  {timeStamp}
+                </View>
                 :
-                <Text style={styles.footerText}>Viewing {this.state.ticker_data.length} stocks</Text>
+                <View>
+                  <Text style={styles.footerText}>Viewing {this.state.ticker_data.length} stocks</Text>
+                  {timeStamp}
+                </View>
             }
           />
         </View>
@@ -145,6 +169,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white'
   },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingRight: 15,
+    paddingLeft: 15,
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  search: {
+    width: 250,
+  },
   infoText: {
     fontSize: 20,
     textAlign: 'center',
@@ -155,5 +191,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 15,
     color: 'white'
+  },
+  emptyAdd: {
+    marginTop: 20,
+    marginBottom: 20,
+    marginRight: 20,
+    marginLeft: 20,
+    paddingTop: height / 16,
+    paddingBottom: height / 16,
+    fontSize: 20,
+    textAlign: 'center',
+    color: '#F4F5FB',
+    backgroundColor: '#0B3948',
+  },
+  addText: {
+    fontSize: 17,
+    color: 'white',
   }
 });
