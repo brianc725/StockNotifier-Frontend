@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import {
-  Text, View, TextInput, TouchableOpacity
+  View, TextInput
 } from 'react-native';
 import styles from '../styles';
 import { saveSignIn } from '../auth';
 import PrimaryButton from './PrimaryButton';
-import DisabledButton from '../Components/DisabledButton';
 
 export default class LoginForm extends Component {
 
@@ -33,14 +32,7 @@ export default class LoginForm extends Component {
 
   render() {
     const emptyInput = this.validate(this.state.username, this.state.password)
-
-    let button;
-    if (emptyInput.username || emptyInput.password) {
-      button = <DisabledButton>LOG IN</DisabledButton>
-    } else {
-      button = <PrimaryButton onPress={this.onSignIn}>LOG IN</PrimaryButton>
-    }
-
+    const disableButton = emptyInput.username || emptyInput.password;
     return (
       <View style={styles.container}>
         <TextInput style={styles.input} 
@@ -61,7 +53,10 @@ export default class LoginForm extends Component {
           placeholderTextColor='rgba(0,0,0,0.5)'
           secureTextEntry/>
 
-        {button}
+        <PrimaryButton onPress={this.onSignIn}
+          disabled={disableButton}>
+          Sign In
+        </PrimaryButton>
         
       </View>
     );

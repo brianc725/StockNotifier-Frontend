@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {
-  Text, View, TextInput, TouchableOpacity
+  View, TextInput
 } from 'react-native';
 import styles from '../styles';
-import Button from './PrimaryButton';
-import DisabledButton from '../Components/DisabledButton';
+import PrimaryButton from './PrimaryButton';
+import FloatingLabelInput from './FloatingLabelInput';
 
 export default class RegisterForm extends Component {
 
@@ -48,17 +48,11 @@ export default class RegisterForm extends Component {
     };
 
     const disableRegisterButton = badInput.email || badInput.password || badInput.passwordAgain;
-    
-    let registerButton;
-    if (disableRegisterButton) {
-      registerButton = <DisabledButton>REGISTER</DisabledButton>
-    } else {
-      registerButton = <PrimaryButton>REGISTER</PrimaryButton>
-    }
 
     return (
       <View style={styles.container}>
-        <TextInput style={shouldMarkError('username') ? styles.badInput : styles.input} 
+        <FloatingLabelInput label={'Username'}
+          style={shouldMarkError('username') ? styles.badInput : styles.input} 
           autoCapitalize="none" 
           onSubmitEditing={() => this.passwordInput.focus()}
           onChangeText={(text) => this.setState({username: text})}
@@ -66,8 +60,8 @@ export default class RegisterForm extends Component {
           autoCorrect={false} 
           keyboardType='email-address'
           returnKeyType="next" 
-          placeholder='Username'
-          placeholderTextColor='rgba(0,0,0,0.5)'
+          // placeholder='Username'
+          // placeholderTextColor='rgba(0,0,0,0.5)'
           />
 
         <TextInput style={shouldMarkError('password') ? styles.badInput : styles.input}   
@@ -89,7 +83,10 @@ export default class RegisterForm extends Component {
           placeholderTextColor='rgba(0,0,0,0.5)'
           secureTextEntry/>
 
-        {registerButton}
+        <PrimaryButton onPress={this.onSignIn}
+          disabled={disableRegisterButton}>
+          Sign Up
+        </PrimaryButton>
         
       </View>
     );
