@@ -23,6 +23,7 @@ export default class StockList extends Component {
       // all of the data received by the api call for "restoring" after search filtering
       full_ticker_data: [],
       lastUpdated: undefined,
+      filterMode: 'none',
     };
   }
 
@@ -71,6 +72,41 @@ export default class StockList extends Component {
     this.setState({ search: formatSearch, ticker_data });
   }
 
+  filterData = () => {
+    const { filterMode, ticker_data } = this.state;
+    switch (filterMode) {
+      // Apple, Boeing, Delta, Snap
+      case 'azID':
+        return ticker_data.sort((a, b) => {
+          return a.id.toLowerCase() >= b.id.toLowerCase();
+        });
+      // Snap, Delta, Boeing, Apple
+      case 'zaID':
+        return ticker_data.sort((a, b) => {
+          return a.id.toLowerCase() <= b.id.toLowerCase();
+        });
+      // 10, 40, 200, 3000
+      case 'incrPrice':
+        return ticker_data.sort((a, b) => {
+          var aPrice = parseFloat(a.price);
+          var bPrice = parseFloat(b.price)
+
+          return aPrice >= bPrice;
+        });
+      // 3000, 200, 40, 10
+      case 'decrPrice':
+        return ticker_data.sort((a, b) => {
+          var aPrice = parseFloat(a.price);
+          var bPrice = parseFloat(b.price)
+
+          return aPrice <= bPrice;
+        });
+      // no filter
+      default:
+        return ticker_data;
+    }
+  }
+
   render() {
     let { ticker_data, search, lastUpdated } = this.state
 
@@ -109,7 +145,7 @@ export default class StockList extends Component {
         <View style={styles.container}>
           {header}
           <FlatList
-            data={this.state.ticker_data}
+            data={this.filterData()}
             renderItem={({ item }) =>
               <TickerCard id={item.id} name={item.name} price={item.price} />}
             keyExtractor={this._keyExtractor}
@@ -117,7 +153,7 @@ export default class StockList extends Component {
               <View>
                 <SearchBar style={styles.search} placeholder="Search Followed Stocks..." lightTheme round onChangeText={this.handleSearch} value={search} />
                 <View style={styles.row}>
-                {/* TODO: Touchable Opacity these two! */}
+                  {/* TODO: Touchable Opacity these two! */}
                   <Text style={styles.addText}>+ Add Symbol</Text>
                   <Ionicon color="white" name="ios-funnel" size={25} />
                 </View>
