@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
-  Text, View, TouchableOpacity, FlatList, StyleSheet, Dimensions, ActivityIndicator, Alert, Platform
+  Text, View, TouchableOpacity, FlatList, StyleSheet, Dimensions,
+  ActivityIndicator, Alert, Platform, Modal, TouchableHighlight
 } from 'react-native';
 import TickerCard from '../Components/TickerCard';
 import { contains } from '../Scripts/Search';
@@ -9,10 +10,30 @@ import { SafeAreaView } from 'react-navigation';
 import { Header, SearchBar, Button } from 'react-native-elements'
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import _ from 'lodash';
-import { whileStatement } from '@babel/types';
 
 const API_URL = Platform.OS == 'ios' ? "http://localhost:5000/tickers" : "http://10.0.2.2:5000/tickers"
 const NYSE_URL = Platform.OS == 'ios' ? "http://localhost:5000/nyse" : "http://10.0.2.2:5000/nyse"
+
+// The filter picker options 
+const pickerValues = [
+  {
+    title: 'A-Z by Name',
+    value: 'azID'
+  },
+  {
+    title: 'Z-A by Name',
+    value: 'zaID'
+  },
+  {
+    title: 'Increasing Price',
+    value: 'incrPrice'
+  },
+  {
+    title: 'Decreasing Price',
+    value: 'decrPrice'
+  },
+]
+
 
 export default class StockList extends Component {
   constructor(props) {
@@ -24,6 +45,7 @@ export default class StockList extends Component {
       full_ticker_data: [],
       lastUpdated: undefined,
       filterMode: 'none',
+      pickerDisplayed: false,
     };
   }
 
@@ -70,6 +92,29 @@ export default class StockList extends Component {
       return contains(item, formatSearch);
     });
     this.setState({ search: formatSearch, ticker_data });
+  }
+
+  // Navigate to add ticker page with props of user's ticker data passed in
+  onAddSymbolPress() {
+    Alert.alert('add symbol not implemented yet');
+  }
+
+  // Toggle the Pop up Picker for Filter options
+  togglePicker() {
+    const { pickerDisplayed } = this.state;
+    this.setState({
+      pickerDisplayed: !pickerDisplayed,
+    });
+  }
+
+  // Save the picker value chosen 
+  setPickerValue(selection) {
+    this.setState({
+      filterMode: selection
+    })
+
+    // Close the picker 
+    this.togglePicker();
   }
 
   filterData = () => {
@@ -127,6 +172,7 @@ export default class StockList extends Component {
       }}
     />
 
+    // Loading screen 
     if (ticker_data === undefined) {
       return (
         <SafeAreaView style={styles.loading}>
@@ -144,6 +190,26 @@ export default class StockList extends Component {
       return (
         <View style={styles.container}>
           {header}
+          {/* Picker Modal */}
+          <Modal visible={this.state.pickerDisplayed} animationType={"slide"} transparent={true}>
+            <View style={styles.picker}>
+              <Text style={{ color: 'white', fontSize: 20, textDecorationLine: 'underline' }}>Please pick filtering option:</Text>
+              {pickerValues.map((choice, index) => {
+                return (
+                  <TouchableHighlight
+                    key={index}
+                    onPress={() => this.setPickerValue(choice.value)}
+                    style={{ paddingTop: 4, paddingBottom: 4 }}>
+                    <Text style={styles.pickerText}>> {choice.title}</Text>
+                  </TouchableHighlight>);
+              })}
+
+              {/* Close the picker on cancel */}
+              <TouchableHighlight onPress={() => this.togglePicker()} style={{ paddingTop: 4, paddingBottom: 4 }}>
+                <Text style={{ color: '#D9DBF1' }}>Cancel</Text>
+              </TouchableHighlight>
+            </View>
+          </Modal>
           <FlatList
             data={this.filterData()}
             renderItem={({ item }) =>
@@ -151,18 +217,22 @@ export default class StockList extends Component {
             keyExtractor={this._keyExtractor}
             ListHeaderComponent={
               <View>
-                <SearchBar style={styles.search} placeholder="Search Followed Stocks..." lightTheme round onChangeText={this.handleSearch} value={search} />
                 <View style={styles.row}>
-                  {/* TODO: Touchable Opacity these two! */}
-                  <Text style={styles.addText}>+ Add Symbol</Text>
-                  <Ionicon color="white" name="ios-funnel" size={25} />
+                  <TouchableOpacity onPress={() => this.onAddSymbolPress()}>
+                    <Text style={styles.addText}>+ Add Symbol</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => this.togglePicker()}>
+                    <Ionicon color="white" name="ios-funnel" size={25} />
+                  </TouchableOpacity>
                 </View>
+                <SearchBar style={styles.search} placeholder="Search Followed Stocks..." lightTheme round onChangeText={this.handleSearch} value={search} />
               </View>
             }
+            // Only show Empty Component to add new stock if search length is 0
             ListEmptyComponent={
-              <TouchableOpacity onPress={() => Alert.alert('not implemented yet!')}>
+              (this.state.search.length == 0 && <TouchableOpacity onPress={() => Alert.alert('not implemented yet!')}>
                 <Text style={styles.emptyAdd}>Add first stock!</Text>
-              </TouchableOpacity>
+              </TouchableOpacity>)
             }
             ListFooterComponent={
               // Grammatical fix for 1 stock result only 
@@ -241,6 +311,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#0B3948',
   },
   addText: {
+    fontSize: 17,
+    color: 'white',
+  },
+  picker: {
+    margin: 20,
+    padding: 20,
+    backgroundColor: '#5E8D93',
+    bottom: 20,
+    left: 20,
+    right: 20,
+    alignItems: 'center',
+    position: 'absolute',
+    borderColor: 'black',
+    borderWidth: 3,
+  },
+  pickerText: {
     fontSize: 17,
     color: 'white',
   }
