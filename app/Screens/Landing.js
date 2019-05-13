@@ -10,7 +10,7 @@ export default class Landing extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.formContainer}>
+        <View style={styles.landingInputContainer}>
           <PrimaryButton
             onPress={() => this.props.navigation.navigate('Register')}>Sign Up
           </PrimaryButton>

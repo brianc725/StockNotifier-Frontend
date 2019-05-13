@@ -1,15 +1,39 @@
 import React, { Component } from 'react';
 import {
-  Text, View, TouchableOpacity, FlatList, StyleSheet, Dimensions, ActivityIndicator, Alert, Platform
+  Text, View, TouchableOpacity, FlatList, StyleSheet, Dimensions,
+  ActivityIndicator, Alert, Platform, Modal, TouchableHighlight
 } from 'react-native';
 import TickerCard from '../Components/TickerCard';
 import { contains } from '../Scripts/Search';
 import PrimaryButton from '../Components/PrimaryButton';
 import { SafeAreaView } from 'react-navigation';
-import { Header, SearchBar } from 'react-native-elements'
+import { Header, SearchBar, Button } from 'react-native-elements'
+import Ionicon from 'react-native-vector-icons/Ionicons';
 import _ from 'lodash';
 
 const API_URL = Platform.OS == 'ios' ? "http://localhost:5000/tickers" : "http://10.0.2.2:5000/tickers"
+const NYSE_URL = Platform.OS == 'ios' ? "http://localhost:5000/nyse" : "http://10.0.2.2:5000/nyse"
+
+// The filter picker options 
+const pickerValues = [
+  {
+    title: 'A-Z by Name',
+    value: 'azID'
+  },
+  {
+    title: 'Z-A by Name',
+    value: 'zaID'
+  },
+  {
+    title: 'Increasing Price',
+    value: 'incrPrice'
+  },
+  {
+    title: 'Decreasing Price',
+    value: 'decrPrice'
+  },
+]
+
 
 export default class StockList extends Component {
   constructor(props) {
@@ -19,6 +43,9 @@ export default class StockList extends Component {
       search: "",
       // all of the data received by the api call for "restoring" after search filtering
       full_ticker_data: [],
+      lastUpdated: undefined,
+      filterMode: 'none',
+      pickerDisplayed: false,
     };
   }
 
@@ -40,10 +67,15 @@ export default class StockList extends Component {
       .then((response) => { return response.json(); })
       .then((data) => {
         temp = data;
+
+        // Get last synced time 
+        const time = new Date().toLocaleString();
+
         // Currently data is returned in 'tickers'
         this.setState({
           ticker_data: temp.tickers,
           full_ticker_data: temp.tickers,
+          lastUpdated: time,
         });
       })
       .catch((error) => { console.log(error); });
@@ -62,9 +94,85 @@ export default class StockList extends Component {
     this.setState({ search: formatSearch, ticker_data });
   }
 
-  render() {
-    let { ticker_data, search } = this.state
+  // Navigate to add ticker page with props of user's ticker data passed in
+  onAddSymbolPress() {
+    Alert.alert('add symbol not implemented yet');
+  }
 
+  // Toggle the Pop up Picker for Filter options
+  togglePicker() {
+    const { pickerDisplayed } = this.state;
+    this.setState({
+      pickerDisplayed: !pickerDisplayed,
+    });
+  }
+
+  // Save the picker value chosen 
+  setPickerValue(selection) {
+    this.setState({
+      filterMode: selection
+    })
+
+    // Close the picker 
+    this.togglePicker();
+  }
+
+  filterData = () => {
+    const { filterMode, ticker_data } = this.state;
+    switch (filterMode) {
+      // Apple, Boeing, Delta, Snap
+      case 'azID':
+        return ticker_data.sort((a, b) => {
+          return a.id.toLowerCase() >= b.id.toLowerCase();
+        });
+      // Snap, Delta, Boeing, Apple
+      case 'zaID':
+        return ticker_data.sort((a, b) => {
+          return a.id.toLowerCase() <= b.id.toLowerCase();
+        });
+      // 10, 40, 200, 3000
+      case 'incrPrice':
+        return ticker_data.sort((a, b) => {
+          var aPrice = parseFloat(a.price);
+          var bPrice = parseFloat(b.price)
+
+          return aPrice >= bPrice;
+        });
+      // 3000, 200, 40, 10
+      case 'decrPrice':
+        return ticker_data.sort((a, b) => {
+          var aPrice = parseFloat(a.price);
+          var bPrice = parseFloat(b.price)
+
+          return aPrice <= bPrice;
+        });
+      // no filter
+      default:
+        return ticker_data;
+    }
+  }
+
+  render() {
+    let { ticker_data, search, lastUpdated } = this.state
+
+    const header = <Header
+      leftComponent={{
+        icon: 'menu',
+        color: '#fff',
+        onPress: () => this.props.navigation.openDrawer(),
+      }}
+      centerComponent={{ text: 'Following Stocks', style: { color: '#fff' } }}
+      rightComponent={{
+        icon: 'refresh',
+        color: '#fff',
+        onPress: () => this.grabData(),
+      }}
+      containerStyle={{
+        backgroundColor: '#5E8D93',
+      }}
+    />
+
+    // Loading screen 
     if (ticker_data === undefined) {
       return (
         <SafeAreaView style={styles.loading}>
@@ -74,49 +182,71 @@ export default class StockList extends Component {
         </SafeAreaView>
       );
     }
-    // This is for no tickers. Differentiate from no search results.
-    else if (ticker_data.length === 0 && search.length == 0) {
-      return (
-        <SafeAreaView style={styles.loading}>
-          <Text style={styles.infoText}>No tickers added yet.</Text>
-          {/* Takes you to manage tickers page right away  */}
-          <PrimaryButton onPress={() => this.props.navigation.navigate('ManageTickers')}>Manage Stock List</PrimaryButton>
-        </SafeAreaView>
-      );
-    }
+
     else {
       // TODO: Maybe have a filter option to sort by A-Z, sort by price, etc.
+      const timeStamp = <Text style={styles.footerText}>Last updated: {lastUpdated}</Text>
+
       return (
         <View style={styles.container}>
-          <Header
-            leftComponent={{
-              icon: 'menu',
-              color: '#fff',
-              onPress: () => this.props.navigation.openDrawer(),
-            }}
-            centerComponent={{ text: 'Following Stocks', style: { color: '#fff' } }}
-            rightComponent={{
-              icon: 'refresh',
-              color: '#fff',
-              onPress: () => this.grabData(),
-            }}
-            containerStyle={{
-              backgroundColor: '#5E8D93',
-            }}
-          />
+          {header}
+          {/* Picker Modal */}
+          <Modal visible={this.state.pickerDisplayed} animationType={"slide"} transparent={true}>
+            <View style={styles.picker}>
+              <Text style={{ color: 'white', fontSize: 20, textDecorationLine: 'underline' }}>Please pick filtering option:</Text>
+              {pickerValues.map((choice, index) => {
+                return (
+                  <TouchableHighlight
+                    key={index}
+                    onPress={() => this.setPickerValue(choice.value)}
+                    style={{ paddingTop: 4, paddingBottom: 4 }}>
+                    <Text style={styles.pickerText}>> {choice.title}</Text>
+                  </TouchableHighlight>);
+              })}
+
+              {/* Close the picker on cancel */}
+              <TouchableHighlight onPress={() => this.togglePicker()} style={{ paddingTop: 4, paddingBottom: 4 }}>
+                <Text style={{ color: '#D9DBF1' }}>Cancel</Text>
+              </TouchableHighlight>
+            </View>
+          </Modal>
           <FlatList
-            data={this.state.ticker_data}
+            data={this.filterData()}
             renderItem={({ item }) =>
               <TickerCard id={item.id} name={item.name} price={item.price} />}
             keyExtractor={this._keyExtractor}
-            ListHeaderComponent={<SearchBar placeholder="Search Followed Stocks..." lightTheme round onChangeText={this.handleSearch} value={search} />}
+            ListHeaderComponent={
+              <View>
+                <View style={styles.row}>
+                  <TouchableOpacity onPress={() => this.onAddSymbolPress()}>
+                    <Text style={styles.addText}>+ Add Symbol</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => this.togglePicker()}>
+                    <Ionicon color="white" name="ios-funnel" size={25} />
+                  </TouchableOpacity>
+                </View>
+                <SearchBar style={styles.search} placeholder="Search Followed Stocks..." lightTheme round onChangeText={this.handleSearch} value={search} />
+              </View>
+            }
+            // Only show Empty Component to add new stock if search length is 0
+            ListEmptyComponent={
+              (this.state.search.length == 0 && <TouchableOpacity onPress={() => Alert.alert('not implemented yet!')}>
+                <Text style={styles.emptyAdd}>Add first stock!</Text>
+              </TouchableOpacity>)
+            }
             ListFooterComponent={
               // Grammatical fix for 1 stock result only 
               this.state.ticker_data.length == 1
                 ?
-                <Text style={styles.footerText}>Viewing {this.state.ticker_data.length} stock</Text>
+                <View>
+                  <Text style={styles.footerText}>Viewing {this.state.ticker_data.length} stock</Text>
+                  {timeStamp}
+                </View>
                 :
-                <Text style={styles.footerText}>Viewing {this.state.ticker_data.length} stocks</Text>
+                <View>
+                  <Text style={styles.footerText}>Viewing {this.state.ticker_data.length} stocks</Text>
+                  {timeStamp}
+                </View>
             }
           />
         </View>
@@ -145,6 +275,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white'
   },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingRight: 15,
+    paddingLeft: 15,
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  search: {
+    width: 250,
+  },
   infoText: {
     fontSize: 20,
     textAlign: 'center',
@@ -155,5 +297,37 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 15,
     color: 'white'
+  },
+  emptyAdd: {
+    marginTop: 20,
+    marginBottom: 20,
+    marginRight: 20,
+    marginLeft: 20,
+    paddingTop: height / 16,
+    paddingBottom: height / 16,
+    fontSize: 20,
+    textAlign: 'center',
+    color: '#F4F5FB',
+    backgroundColor: '#0B3948',
+  },
+  addText: {
+    fontSize: 17,
+    color: 'white',
+  },
+  picker: {
+    margin: 20,
+    padding: 20,
+    backgroundColor: '#5E8D93',
+    bottom: 20,
+    left: 20,
+    right: 20,
+    alignItems: 'center',
+    position: 'absolute',
+    borderColor: 'black',
+    borderWidth: 3,
+  },
+  pickerText: {
+    fontSize: 17,
+    color: 'white',
   }
 });

@@ -17,6 +17,10 @@ export default styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.BG,
   },
+  formContainer: {
+    position: 'absolute',
+    top: 48,
+  },
   welcome: {
     fontSize: 20,
     textAlign: 'center',
@@ -27,36 +31,49 @@ export default styles = StyleSheet.create({
   //   color: '#333333',
   //   marginBottom: 5,
   // },
+  landingInputContainer: {
+    position: 'absolute',
+    bottom: 96,
+  },
   input: {
     height: 40,
-    width: 300,
-    marginBottom: 10,
-    padding: 10,
+    width: 350,
+    marginBottom: 8,
+    // padding: 10,
+    paddingLeft: 0,
     color: 'rgba(0,0,0,0.7)', 
     borderBottomWidth: 1,
     borderBottomColor: Colors.PRIMARY,
   },
   badInput: {
     height: 40,
-    width: 300,
-    marginBottom: 10,
-    padding: 10,
+    width: 350,
+    marginBottom: 8,
+    // padding: 10,
+    paddingLeft: 0,
     color: 'rgba(0,0,0,0.7)',
     borderBottomWidth: 1,
     borderBottomColor: 'red',
   },
+  floatingLabelInputContainer: {
+    paddingTop: 18,
+    paddingBottom: 18,
+  },
+  errmsg: {
+    color: 'red',
+  },
   buttonContainer: {
     backgroundColor: Colors.PRIMARY,
     padding: 15,
-    marginTop: 15,
+    marginTop: 50,
     width: 300
   },
-  buttonDisabledContainer: {
-    backgroundColor: Colors.PRIMARY_LIGHT,
-    padding: 15,
-    marginTop: 15,
-    width: 300
-  },
+  // buttonDisabledContainer: {
+  //   backgroundColor: Colors.PRIMARY_LIGHT,
+  //   padding: 15,
+  //   marginTop: 15,
+  //   width: 300
+  // },
   buttonText: {
     color: Colors.TEXT_LIGHT,
     textAlign: 'center',

@@ -20,7 +20,7 @@ import styles, { Colors } from './styles';
 const AppScreens = createDrawerNavigator(
   {
     StockList: StockList,
-    ManageTickers: ManageTickers, 
+    // ManageTickers: ManageTickers, 
     About: About,  
   },
   {
@@ -38,7 +38,7 @@ const AuthScreens = createStackNavigator(
           title: "Welcome to Stock Notifier!",
           headerTitleStyle: {fontWeight: 'normal', fontFamily: "sans-serif-medium" },
           headerRight: (
-            <Text style={{color: Colors.TEXT_LIGHT}} onPress={() => navigation.navigate('Login')}>Sign In</Text>
+            <Text style={{color: Colors.TEXT_LIGHT, fontWeight: 'bold'}} onPress={() => navigation.navigate('Login')}>Sign In</Text>
           ),
           headerRightContainerStyle: styles.headerRightContainerStyle,
         }

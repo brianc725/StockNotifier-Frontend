@@ -28,7 +28,7 @@ const privacyMsg = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "+
 export default class About extends Component {
 
   static navigationOptions = {
-    drawerLabel: 'About App',
+    drawerLabel: 'About',
   };
 
   render() {

@@ -81,6 +81,8 @@ const localStyles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     marginTop: 5,
+    paddingLeft: 15,
+    paddingRight: 15,
   },
   expandedTitle: {
     color: 'black',
@@ -98,6 +100,8 @@ const localStyles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     marginTop: 5,
+    paddingLeft: 15,
+    paddingRight: 15,
   },
   collapsedText: {
     color: 'black',
