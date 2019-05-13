@@ -20,7 +20,7 @@ import styles, { Colors } from './styles';
 const AppScreens = createDrawerNavigator(
   {
     StockList: StockList,
-    // ManageTickers: ManageTickers, 
+    ManageTickers: ManageTickers, 
     About: About,  
   },
   {
