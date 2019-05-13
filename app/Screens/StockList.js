@@ -12,7 +12,6 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import _ from 'lodash';
 
 const API_URL = Platform.OS == 'ios' ? "http://localhost:5000/tickers" : "http://10.0.2.2:5000/tickers"
-const NYSE_URL = Platform.OS == 'ios' ? "http://localhost:5000/nyse" : "http://10.0.2.2:5000/nyse"
 
 // The filter picker options 
 const pickerValues = [
@@ -44,7 +43,8 @@ export default class StockList extends Component {
       // all of the data received by the api call for "restoring" after search filtering
       full_ticker_data: [],
       lastUpdated: undefined,
-      filterMode: 'none',
+      // default sort by a-z
+      filterMode: 'azID',
       pickerDisplayed: false,
     };
   }
@@ -96,7 +96,7 @@ export default class StockList extends Component {
 
   // Navigate to add ticker page with props of user's ticker data passed in
   onAddSymbolPress() {
-    Alert.alert('add symbol not implemented yet');
+    this.props.navigation.navigate('ManageTickers');
   }
 
   // Toggle the Pop up Picker for Filter options
