@@ -9,7 +9,7 @@ export default class Register extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Register</Text>
+        {/* <Text style={styles.welcome}>Register</Text> */}
         <View style={styles.formContainer}>
           <RegisterForm navigation={this.props.navigation}/>
         </View>
