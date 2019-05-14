@@ -72,21 +72,24 @@ export default class LoginForm extends Component {
   }
 
   labelStyle(field) {
-    const top = this.state.slidingAnims[field].interpolate({
-      inputRange: [0, 1],
-      outputRange: [30, 10],
-    });
 
-    const fontSize = this.state.slidingAnims[field].interpolate({
-      inputRange: [0, 1],
-      outputRange: [16, 12],
-    });
 
     return {
       position: 'absolute',
       left: 0,
-      top: top,
-      fontSize: fontSize,
+      fontSize: (
+        this.state.slidingAnims[field].interpolate({
+          inputRange: [0, 1],
+          outputRange: [16, 12],
+        })),
+      transform: [
+        {
+          translateY: this.state.slidingAnims[field].interpolate({
+            inputRange: [0, 1],
+            outputRange: [30, 10],
+          })
+        }
+      ],
       color: 'rgba(0,0,0,0.5)'
     };
   }
