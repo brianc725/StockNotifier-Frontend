@@ -81,7 +81,7 @@ export default class StockList extends Component {
       .catch((error) => { console.log(error); });
   }
 
-  _keyExtractor = (item, index) => item.id;
+  _keyExtractor = (item) => item.id;
 
   // Save the current query string from the user 
   handleSearch = search => {

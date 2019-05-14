@@ -14,7 +14,7 @@ export default class TickerCard extends Component {
     let { id, name, price } = this.props;
 
     // No price means it's just the list for Add Tickers
-    if (price === '') {
+    if (price === 'ADD') {
       return (
         <View style={styles.card}>
           <View style={styles.left}>

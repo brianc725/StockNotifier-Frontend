@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   Text, View, StyleSheet, Alert, Platform, FlatList, ActivityIndicator,
-  TouchableOpacity,
+  TouchableOpacity, Button,
 } from 'react-native';
 import styles from '../styles'
 import { SafeAreaView } from 'react-navigation';
@@ -9,6 +9,7 @@ import { Header, SearchBar } from 'react-native-elements'
 import AsyncStorage from '@react-native-community/async-storage';
 import TickerCard from '../Components/TickerCard';
 import PrimaryButton from '../Components/PrimaryButton';
+import { contains } from '../Scripts/Search';
 import _ from 'lodash';
 
 // Don't want this page to show up in the Drawer Navigator 
@@ -19,6 +20,7 @@ class Hidden extends React.Component {
 }
 
 const NYSE_URL = Platform.OS == 'ios' ? "http://localhost:5000/nyse" : "http://10.0.2.2:5000/nyse"
+const ITEMS_PER_PAGE = 20;
 
 // This class is for adding new stock tickers 
 export default class ManageTickers extends Component {
@@ -78,7 +80,7 @@ export default class ManageTickers extends Component {
     drawerLabel: <Hidden />,
   };
 
-  _keyExtractor = (item, index) => item.id;
+  _keyExtractor = (item) => item.id;
 
   filterData = () => {
     const { navigation } = this.props;
@@ -141,7 +143,7 @@ export default class ManageTickers extends Component {
           <FlatList
             data={this.filterData()}
             renderItem={({ item }) =>
-              <TickerCard id={item.id} name={item.name} price={''} />}
+              <TickerCard id={item.id} name={item.name} price={'ADD'} />}
             keyExtractor={this._keyExtractor}
             ListHeaderComponent={
               <View>
@@ -149,9 +151,12 @@ export default class ManageTickers extends Component {
               </View>
             }
             ListFooterComponent={
-              // Grammatical fix for 1 stock result only 
+              // Showing ... of tickers.length. 
               <View>
-                <Text>Load more... Change to button</Text>
+                {/* Need special case if on page tickers shown is > tickers.length  */}
+                <Text style={localStyles.footerText}>Showing ___ of {this.state.tickers.length}</Text>
+                {/* Change this to a button */}
+                {this.state.tickers.length != 0 && <Text style={localStyles.footerText}>Load more...</Text>}
               </View>
             }
           />
@@ -170,5 +175,11 @@ const localStyles = StyleSheet.create({
     backgroundColor: '#5E8D93',
     top: 0,
     bottom: 0,
+  },
+  footerText: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 15,
+    color: 'white'
   },
 });
