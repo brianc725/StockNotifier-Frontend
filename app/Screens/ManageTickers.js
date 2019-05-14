@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import {
-  Text, View, StyleSheet, Alert, Platform
+  Text, View, StyleSheet, Alert, Platform, FlatList, ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import styles from '../styles'
 import { SafeAreaView } from 'react-navigation';
 import { Header, SearchBar } from 'react-native-elements'
+import AsyncStorage from '@react-native-community/async-storage';
+import TickerCard from '../Components/TickerCard';
+import PrimaryButton from '../Components/PrimaryButton';
+import _ from 'lodash';
 
 // Don't want this page to show up in the Drawer Navigator 
 class Hidden extends React.Component {
@@ -21,10 +26,11 @@ export default class ManageTickers extends Component {
     super(props);
     this.state = {
       search: "",
-      // all of the data received by the api call for "restoring" after search filtering
       tickers: undefined,
-      userTickers: [], 
+      // all of the data received by the api call for "restoring" after search filtering
       all_tickers: [],
+      // Remove this, this is passed via props
+      userTickers: [],
     };
   }
 
@@ -32,30 +38,66 @@ export default class ManageTickers extends Component {
     this.grabData()
   }
 
-  // Function queries the DB for all stock tickers in NYSE 
+  // Function gets all stock tickers in NYSE from storage or the API 
   async grabData() {
-    let temp;
 
-    // Fetch the data from the API 
-    await fetch(NYSE_URL)
-      .then((response) => { return response.json(); })
-      .then((data) => {
-        temp = data;
+    // Check to see if we already have it in storage 
+    const temp = await AsyncStorage.getItem('ALL_TICKERS')
+    if (temp !== null) {
+      // value previously stored
+      tempJSON = JSON.parse(temp);
 
-        // Currently data is returned in 'tickers'
-        this.setState({
-          // remove the ones that user has already 
-          tickers: temp.tickers,
-          all_tickers: temp.tickers,
-        });
-      })
-      .catch((error) => { console.log(error); });
+      // Currently data is returned in 'nyse'
+      this.setState({
+        tickers: tempJSON.nyse,
+        all_tickers: tempJSON.nyse,
+      });
+    }
+    else {
+      // Fetch the data from the API 
+      let stuff;
+      await fetch(NYSE_URL)
+        .then((response) => { return response.json(); })
+        .then((data) => {
+          stuff = data;
+          // Store the value in storage
+          AsyncStorage.setItem('ALL_TICKERS', JSON.stringify(data))
+
+          // Currently data is returned in 'nyse'
+          this.setState({
+            tickers: stuff.nyse,
+            all_tickers: stuff.nyse,
+          });
+        })
+        .catch((error) => { console.log(error); });
+    }
   }
 
   // Hide direct navigation to this page via Drawer
   static navigationOptions = {
     drawerLabel: <Hidden />,
   };
+
+  _keyExtractor = (item, index) => item.id;
+
+  filterData = () => {
+    const { navigation } = this.props;
+    const { tickers } = this.state;
+    const userTickers = navigation.getParam('userTickers');
+
+    // Sort all Tickers
+    let sortedTickers = tickers.sort((a, b) => {
+      return a.id.toLowerCase() >= b.id.toLowerCase();
+    });
+
+    // Remove tickers that the user has already added
+    // Written by Vincent 
+    let removedTickers = sortedTickers.filter(stock =>
+      !userTickers.map(elem => elem.id).includes(stock.id));
+
+    // Return edited information
+    return removedTickers;
+  }
 
   // Save the current query string from the user 
   handleSearch = search => {
@@ -69,25 +111,53 @@ export default class ManageTickers extends Component {
   }
 
   render() {
-    let { search } = this.state;
+    let { search, tickers } = this.state;
 
-    return (
-      <View style={localStyles.container}>
-        {/* TODO: Needs to be edited */}
-        <Header
-          centerComponent={{ text: 'Add Symbols', style: { color: '#fff' } }}
-          rightComponent={{
-            icon: 'done',
-            color: '#fff',
-            onPress: () => this.props.navigation.goBack(),
-          }}
-          containerStyle={{
-            backgroundColor: '#5E8D93',
-          }}
-        />
-        <SearchBar style={styles.search} placeholder="Search For Stocks..." lightTheme round onChangeText={this.handleSearch} value={search} />
-      </View>
-    );
+    // Loading screen 
+    if (tickers === undefined) {
+      return (
+        <SafeAreaView style={styles.loading}>
+          <Text style={styles.infoText}>Attempting to get all tickers...</Text>
+          <ActivityIndicator size="large" color="#0B3948" />
+          <PrimaryButton onPress={() => this.grabData()}>Refresh Now</PrimaryButton>
+        </SafeAreaView>
+      );
+    }
+
+    else {
+      return (
+        <View style={localStyles.container}>
+          <Header
+            centerComponent={{ text: 'Add Symbols', style: { color: '#fff' } }}
+            rightComponent={{
+              icon: 'done',
+              color: '#fff',
+              onPress: () => this.props.navigation.goBack(),
+            }}
+            containerStyle={{
+              backgroundColor: '#5E8D93',
+            }}
+          />
+          <FlatList
+            data={this.filterData()}
+            renderItem={({ item }) =>
+              <TickerCard id={item.id} name={item.name} price={''} />}
+            keyExtractor={this._keyExtractor}
+            ListHeaderComponent={
+              <View>
+                <SearchBar style={styles.search} placeholder="Search For Stocks..." lightTheme round onChangeText={this.handleSearch} value={search} />
+              </View>
+            }
+            ListFooterComponent={
+              // Grammatical fix for 1 stock result only 
+              <View>
+                <Text>Load more... Change to button</Text>
+              </View>
+            }
+          />
+        </View>
+      );
+    }
   }
 }
 

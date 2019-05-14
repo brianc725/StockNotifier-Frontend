@@ -1,8 +1,12 @@
 # NEWS
 
+## May 13, 2019
+- Fixed added ability for new stocks to be added 
+
 ## May 12, 2019
 - Added ability to filter by ticker id or by price 
 - Search for new stocks to add that aren't already followed
+- Made login and register pages prettier
 
 ## May 10, 2019
 - Added Terms and Conditions and Privacy Policy 

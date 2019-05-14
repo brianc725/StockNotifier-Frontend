@@ -96,7 +96,11 @@ export default class StockList extends Component {
 
   // Navigate to add ticker page with props of user's ticker data passed in
   onAddSymbolPress() {
-    this.props.navigation.navigate('ManageTickers');
+    const { ticker_data } = this.state;
+
+    this.props.navigation.navigate('ManageTickers', {
+      userTickers: ticker_data,
+    });
   }
 
   // Toggle the Pop up Picker for Filter options
@@ -230,7 +234,7 @@ export default class StockList extends Component {
             }
             // Only show Empty Component to add new stock if search length is 0
             ListEmptyComponent={
-              (this.state.search.length == 0 && <TouchableOpacity onPress={() => Alert.alert('not implemented yet!')}>
+              (this.state.search.length == 0 && <TouchableOpacity onPress={() => this.onAddSymbolPress()}>
                 <Text style={styles.emptyAdd}>Add first stock!</Text>
               </TouchableOpacity>)
             }
