@@ -118,8 +118,8 @@ export default class ManageTickers extends Component {
     // Loading screen 
     if (tickers === undefined) {
       return (
-        <SafeAreaView style={styles.loading}>
-          <Text style={styles.infoText}>Attempting to get all tickers...</Text>
+        <SafeAreaView style={localStyles.loading}>
+          <Text style={localStyles.infoText}>Attempting to get all tickers...</Text>
           <ActivityIndicator size="large" color="#0B3948" />
           <PrimaryButton onPress={() => this.grabData()}>Refresh Now</PrimaryButton>
         </SafeAreaView>
@@ -176,10 +176,22 @@ const localStyles = StyleSheet.create({
     top: 0,
     bottom: 0,
   },
+  loading: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white'
+  },
   footerText: {
     fontSize: 14,
     textAlign: 'center',
     marginBottom: 15,
     color: 'white'
+  },
+  infoText: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
   },
 });

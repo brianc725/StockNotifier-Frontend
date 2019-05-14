@@ -6,7 +6,7 @@ import {
   createBottomTabNavigator
 } from 'react-navigation';
 import React from 'react';
-import { Button, Text } from 'react-native'
+import { Button, Text, Platform, StyleSheet} from 'react-native'
 import Login from './Screens/Login';
 import Register from './Screens/Register';
 import StockList from './Screens/StockList';
@@ -36,7 +36,10 @@ const AuthScreens = createStackNavigator(
       navigationOptions: ({navigation}) => {
         return {
           title: "Welcome to Stock Notifier!",
-          headerTitleStyle: {fontWeight: 'normal', fontFamily: "sans-serif-medium" },
+          headerTitleStyle: {
+            fontWeight: 'normal', 
+            fontFamily: 'sans-serif-medium',
+          },
           headerRight: (
             <Text style={{color: Colors.TEXT_LIGHT, fontWeight: 'bold'}} onPress={() => navigation.navigate('Login')}>Sign In</Text>
           ),
