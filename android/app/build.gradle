@@ -109,6 +109,12 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+	ndk {
+          abiFilters "armeabi-v7a", "x86"
+          moduleName "login_client"
+          ldLibs "gmp", "sodium"
+          cFlags "-std=c99"
+        }
     }
     splits {
         abi {
@@ -137,6 +143,11 @@ android {
             }
         }
     }
+    externalNativeBuild {
+        ndkBuild {
+            path file('src/main/jni/Android.mk')
+        }
+    }	
 }
 
 dependencies {

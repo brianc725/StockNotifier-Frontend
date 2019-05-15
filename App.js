@@ -12,6 +12,7 @@ import Login from './app/Screens/Login';
 import StockList from './app/Screens/StockList';
 import Register from './app/Screens/Register';
 import Navigator from './app/Navigator';
+import ClientLogin from './ClientLogin';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
