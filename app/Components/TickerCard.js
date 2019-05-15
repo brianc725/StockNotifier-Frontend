@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
   },
   idText: {
     fontWeight: 'bold',
+    color: 'black',
     fontSize: 20,
   },
   priceText: {

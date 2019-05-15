@@ -1,5 +1,8 @@
 # NEWS
 
+## May 14, 2019
+- Added ability to delete stocks via swipe left
+
 ## May 13, 2019
 - Fixed added ability for new stocks to be added 
 

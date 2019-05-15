@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   Text, View, TouchableOpacity, FlatList, StyleSheet, Dimensions,
-  ActivityIndicator, Alert, Platform, Modal, TouchableHighlight
+  ActivityIndicator, Alert, Platform, Modal, TouchableHighlight, Animated
 } from 'react-native';
 import TickerCard from '../Components/TickerCard';
 import { contains } from '../Scripts/Search';
@@ -9,9 +9,11 @@ import PrimaryButton from '../Components/PrimaryButton';
 import { SafeAreaView } from 'react-navigation';
 import { Header, SearchBar, Button } from 'react-native-elements'
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import Swipeout from 'react-native-swipeout';
 import _ from 'lodash';
 
 const API_URL = Platform.OS == 'ios' ? "http://localhost:5000/tickers" : "http://10.0.2.2:5000/tickers"
+// const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
 // The filter picker options 
 const pickerValues = [
@@ -137,6 +139,7 @@ export default class StockList extends Component {
       // 10, 40, 200, 3000
       case 'incrPrice':
         return ticker_data.sort((a, b) => {
+          // TODO: try catch statements for this
           var aPrice = parseFloat(a.price);
           var bPrice = parseFloat(b.price)
 
@@ -145,6 +148,7 @@ export default class StockList extends Component {
       // 3000, 200, 40, 10
       case 'decrPrice':
         return ticker_data.sort((a, b) => {
+          // TODO: try catch statements for this 
           var aPrice = parseFloat(a.price);
           var bPrice = parseFloat(b.price)
 
@@ -154,6 +158,53 @@ export default class StockList extends Component {
       default:
         return ticker_data;
     }
+  }
+
+  // Handle the deletion of the ticker 
+  handleDelete(item) {
+    Alert.alert('Deleted not implemented!');
+    // Call the API with the API to be deleted 
+
+    // Alert.alert('Deleted ' + item.id);
+  }
+
+  // Confirm deletion of the stock ticker
+  confirmDelete(item) {
+    const tickerID = item.id
+
+    Alert.alert(
+      'Are you sure you want to delete?',
+      tickerID, 
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => this.handleDelete(item)}
+      ],
+      {cancelable: false},
+    );
+  }
+
+  renderItem(item) {
+    // Buttons
+    let swipeoutBtns = [
+      {
+        text: 'Delete',
+        backgroundColor: 'red',
+        underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
+        onPress: () => { this.confirmDelete(item); }
+      },
+    ];
+
+    return (
+      <Swipeout right={swipeoutBtns}
+        autoClose={true}
+        backgroundColor='transparent'>
+        <TickerCard id={item.id} name={item.name} price={item.price} />
+      </Swipeout>
+    );
   }
 
   render() {
@@ -216,8 +267,7 @@ export default class StockList extends Component {
           </Modal>
           <FlatList
             data={this.filterData()}
-            renderItem={({ item }) =>
-              <TickerCard id={item.id} name={item.name} price={item.price} />}
+            renderItem={({ item }) => this.renderItem(item)}
             keyExtractor={this._keyExtractor}
             ListHeaderComponent={
               <View>
@@ -333,5 +383,9 @@ const styles = StyleSheet.create({
   pickerText: {
     fontSize: 17,
     color: 'white',
-  }
+  },
+  actionIcon: {
+    width: 30,
+    marginHorizontal: 10,
+  },
 });
