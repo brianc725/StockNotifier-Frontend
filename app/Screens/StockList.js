@@ -174,16 +174,16 @@ export default class StockList extends Component {
 
     Alert.alert(
       'Are you sure you want to delete?',
-      tickerID, 
+      tickerID,
       [
         {
           text: 'Cancel',
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        {text: 'OK', onPress: () => this.handleDelete(item)}
+        { text: 'OK', onPress: () => this.handleDelete(item) }
       ],
-      {cancelable: false},
+      { cancelable: false },
     );
   }
 
@@ -233,7 +233,10 @@ export default class StockList extends Component {
         <SafeAreaView style={styles.loading}>
           <Text style={styles.infoText}>Attempting to get ticker data...</Text>
           <ActivityIndicator size="large" color="#0B3948" />
-          <PrimaryButton onPress={() => this.grabData()}>Refresh Now</PrimaryButton>
+          <Button
+            onPress={() => this.grabData()}
+            title="Refresh Now"
+          />
         </SafeAreaView>
       );
     }
@@ -248,7 +251,7 @@ export default class StockList extends Component {
           {/* Picker Modal */}
           <Modal visible={this.state.pickerDisplayed} animationType={"slide"} transparent={true}>
             <View style={styles.picker}>
-              <Text style={{ color: 'white', fontSize: 20, textDecorationLine: 'underline' }}>Please pick filtering option:</Text>
+              <Text style={{ color: 'white', fontSize: 20, }}>Please pick filtering option:</Text>
               {pickerValues.map((choice, index) => {
                 return (
                   <TouchableHighlight
@@ -265,6 +268,7 @@ export default class StockList extends Component {
               </TouchableHighlight>
             </View>
           </Modal>
+
           <FlatList
             data={this.filterData()}
             renderItem={({ item }) => this.renderItem(item)}
@@ -325,7 +329,7 @@ const styles = StyleSheet.create({
   loading: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: 'white'
   },

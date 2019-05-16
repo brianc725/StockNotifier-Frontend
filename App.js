@@ -6,8 +6,8 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import React, { Component } from 'react';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import Login from './app/Screens/Login';
 import StockList from './app/Screens/StockList';
 import Register from './app/Screens/Register';

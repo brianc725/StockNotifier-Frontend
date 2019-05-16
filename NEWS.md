@@ -1,5 +1,8 @@
 # NEWS
 
+## May 16, 2019
+- Styling updates when fetching for data
+
 ## May 14, 2019
 - Added ability to delete stocks via swipe left
 
