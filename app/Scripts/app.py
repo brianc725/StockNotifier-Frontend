@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -86,7 +86,37 @@ def get_tickers():
 
 @app.route('/nyse', methods=['GET'])
 def all_nyse():
-    return jsonify({'nyse': nyse})    
+    return jsonify({'nyse': nyse})
+
+# Developing authentication
+
+user_salt = 69
+
+@app.route('/register', methods=['POST'])
+def register():
+    print(request.get_json())
+    return jsonify({'user_salt': user_salt})
+
+@app.route('/login/get_salt', methods=['POST'])
+def get_salt():
+    print(request.get_json())
+    return jsonify({'user_salt': user_salt, 'nonce': 1234})
+
+@app.route('/login/get_b', methods=['POST'])
+def get_b():
+    print(request.get_json())
+    return jsonify({'big_b': 60})
+
+@app.route('/login/get_m2', methods=['POST'])
+def get_m2():
+    print(request.get_json())
+    return jsonify({'m2': 70})
+
+
+
+
+
+
 
 if __name__ == '__main__':
     app.run()
