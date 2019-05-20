@@ -139,18 +139,32 @@ export default class StockList extends Component {
       // 10, 40, 200, 3000
       case 'incrPrice':
         return ticker_data.sort((a, b) => {
-          // TODO: try catch statements for this
           var aPrice = parseFloat(a.price);
           var bPrice = parseFloat(b.price)
+
+          // If any of the prices are NaN, just treat as Infinity 
+          if (isNaN(aPrice)) {
+            aPrice = Infinity;
+          }
+          if (isNaN(bPrice )) {
+            bPrice = Infinity;
+          }
 
           return aPrice >= bPrice;
         });
       // 3000, 200, 40, 10
       case 'decrPrice':
         return ticker_data.sort((a, b) => {
-          // TODO: try catch statements for this 
           var aPrice = parseFloat(a.price);
           var bPrice = parseFloat(b.price)
+
+          // If any of the prices are NaN, just treat as Infinity 
+          if (isNaN(aPrice)) {
+            aPrice = Infinity;
+          }
+          if (isNaN(bPrice )) {
+            bPrice = Infinity;
+          }
 
           return aPrice <= bPrice;
         });
