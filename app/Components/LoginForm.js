@@ -1,19 +1,31 @@
 import React, { Component } from 'react';
 import {
-  Text, View, TextInput, TouchableOpacity
+  View, TextInput, Animated, Text
 } from 'react-native';
 import styles from '../styles';
 import { saveSignIn } from '../auth';
 import PrimaryButton from './PrimaryButton';
-import DisabledButton from '../Components/DisabledButton';
 
 export default class LoginForm extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      username: undefined,
-      password: undefined
+      fields: {
+        username: "",
+        password: "",
+        passwordAgain: "",
+      },
+      focused: {
+        username: false,
+        password: false,
+        passwordAgain: false
+      },
+      slidingAnims: {
+        username: new Animated.Value(0),
+        password: new Animated.Value(0),
+        passwordAgain: new Animated.Value(0),
+      }
     };
     this.onSignIn = this.onSignIn.bind(this);
   }
@@ -26,42 +38,109 @@ export default class LoginForm extends Component {
   validate(username, password) {
     // true if empty
     return {
-      username: !username || username.length === 0,
-      password: !password || password.length === 0,
+      username: username.length === 0,
+      password: password.length === 0,
     };
   }
 
-  render() {
-    const emptyInput = this.validate(this.state.username, this.state.password)
-
-    let button;
-    if (emptyInput.username || emptyInput.password) {
-      button = <DisabledButton>LOG IN</DisabledButton>
-    } else {
-      button = <PrimaryButton onPress={this.onSignIn}>LOG IN</PrimaryButton>
+  handleBlur = (field) => (evt) => {
+    if (this.state.fields[field].length === 0) {
+      Animated.timing(
+        this.state.slidingAnims[field],
+        {
+          toValue: 0,
+          duration: 200,
+        }
+      ).start();
     }
+    this.setState({
+      focused: { ...this.state.focused, [field]: false },
+    });
+  }
 
+  handleFocus = (field) => (evt) => {
+    Animated.timing(
+      this.state.slidingAnims[field],
+      {
+        toValue: 1,
+        duration: 200,
+      }
+    ).start();
+    this.setState({
+      focused: { ...this.state.focused, [field]: true },
+    });
+  }
+
+  labelStyle(field) {
+
+
+    return {
+      position: 'absolute',
+      left: 0,
+      fontSize: (
+        this.state.slidingAnims[field].interpolate({
+          inputRange: [0, 1],
+          outputRange: [16, 12],
+        })),
+      transform: [
+        {
+          translateY: this.state.slidingAnims[field].interpolate({
+            inputRange: [0, 1],
+            outputRange: [30, 10],
+          })
+        }
+      ],
+      color: 'rgba(0,0,0,0.5)'
+    };
+  }
+
+  errmsg(field, code) {
+    switch (code) {
+      case 0: return null;
+      default: return "input error in " + field;
+    }
+  }
+
+  render() {
+    const emptyInput = this.validate(this.state.fields['username'], this.state.fields['password']);
     return (
       <View style={styles.container}>
-        <TextInput style={styles.input} 
-          autoCapitalize="none" 
-          onSubmitEditing={() => this.passwordInput.focus()}
-          onChangeText={(text) => this.setState({username: text})}
-          autoCorrect={false} 
-          keyboardType='email-address' 
-          returnKeyType="next" 
-          placeholder='Username'
-          placeholderTextColor='rgba(0,0,0,0.5)'/>
 
-        <TextInput style={styles.input}   
-          returnKeyType="go" 
-          onChangeText={(text) => this.setState({password: text})}
-          ref={(input)=> this.passwordInput = input}
-          placeholder='Password'
-          placeholderTextColor='rgba(0,0,0,0.5)'
-          secureTextEntry/>
+        <View style={styles.floatingLabelInputContainer}>
+          <Animated.Text style={this.labelStyle('username')}>
+            Username
+          </Animated.Text>
+          <TextInput style={styles.input} 
+            autoCapitalize="none" 
+            onSubmitEditing={() => this.passwordInput.focus()}
+            onChangeText={(text) => this.setState({fields: {...this.state.fields, username: text}})}
+            onBlur={this.handleBlur('username')}
+            onFocus={this.handleFocus('username')}
+            autoCorrect={false} 
+            keyboardType='email-address' 
+            returnKeyType="next" 
+          />
+          <Text style={styles.errmsg}>{this.errmsg('username', 0)}</Text>
+        </View>
 
-        {button}
+        <View style={styles.floatingLabelInputContainer}>
+          <Animated.Text style={this.labelStyle('password')}>
+            Password
+          </Animated.Text>
+          <TextInput style={styles.input}
+            returnKeyType="go" 
+            onChangeText={(text) => this.setState({fields: {...this.state.fields, password: text}})}
+            onBlur={this.handleBlur('password')}
+            onFocus={this.handleFocus('password')}
+            ref={(input)=> this.passwordInput = input}
+            secureTextEntry
+          />
+          <Text style={styles.errmsg}>{this.errmsg('password', 0)}</Text>
+        </View>
+
+        <PrimaryButton onPress={this.onSignIn}>
+          Sign In
+        </PrimaryButton>
         
       </View>
     );

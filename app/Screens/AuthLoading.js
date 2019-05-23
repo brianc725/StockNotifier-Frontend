@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import {
   ActivityIndicator,
-  AsyncStorage,
   StatusBar,
   StyleSheet,
   View,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { USER_KEY } from '../auth';
 
 export default class AuthLoading extends Component {
