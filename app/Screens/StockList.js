@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import {
   Text, View, TouchableOpacity, FlatList, StyleSheet, Dimensions,
-  ActivityIndicator, Alert, Platform, Modal, TouchableHighlight, Animated
+  ActivityIndicator, Alert, Platform, Modal, TouchableHighlight, 
 } from 'react-native';
 import TickerCard from '../Components/TickerCard';
 import { contains } from '../Scripts/Search';
-import PrimaryButton from '../Components/PrimaryButton';
 import { SafeAreaView } from 'react-navigation';
 import { Header, SearchBar, Button } from 'react-native-elements'
 import Ionicon from 'react-native-vector-icons/Ionicons';
@@ -13,7 +12,6 @@ import Swipeout from 'react-native-swipeout';
 import _ from 'lodash';
 
 const API_URL = Platform.OS == 'ios' ? "http://localhost:5000/tickers" : "http://10.0.2.2:5000/tickers"
-// const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
 // The filter picker options 
 const pickerValues = [

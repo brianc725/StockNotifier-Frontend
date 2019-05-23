@@ -48,7 +48,7 @@ export default class ManageTickers extends Component {
     if (temp !== null) {
       // value previously stored
       tempJSON = JSON.parse(temp);
-
+  
       // Currently data is returned in 'nyse'
       this.setState({
         tickers: tempJSON.nyse,
@@ -64,7 +64,7 @@ export default class ManageTickers extends Component {
           stuff = data;
           // Store the value in storage
           AsyncStorage.setItem('ALL_TICKERS', JSON.stringify(data))
-
+          
           // Currently data is returned in 'nyse'
           this.setState({
             tickers: stuff.nyse,

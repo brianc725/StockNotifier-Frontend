@@ -47,7 +47,7 @@ export default class About extends Component {
           }}
         />
         <ScrollView>
-          <ExpandedMessage title="Terms and Conditions" message={termsMsg} />
+          <ExpandedMessage title="Terms of Service" message={termsMsg} />
           <ExpandedMessage title="Privacy Policy" message={privacyMsg} />
         </ScrollView>
       </View>
