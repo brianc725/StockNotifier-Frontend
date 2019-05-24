@@ -96,10 +96,10 @@ export default class StockList extends Component {
 
   // Navigate to add ticker page with props of user's ticker data passed in
   onAddSymbolPress() {
-    const { ticker_data } = this.state;
+    const { full_ticker_data } = this.state;
 
     this.props.navigation.navigate('ManageTickers', {
-      userTickers: ticker_data,
+      userTickers: full_ticker_data,
     });
   }
 
@@ -214,7 +214,11 @@ export default class StockList extends Component {
       <Swipeout right={swipeoutBtns}
         autoClose={true}
         backgroundColor='transparent'>
+         <TouchableOpacity onPress={() => {
+            Alert.alert('clicked ' + item.id)
+          }}>
         <TickerCard id={item.id} name={item.name} price={item.price} />
+        </TouchableOpacity>
       </Swipeout>
     );
   }

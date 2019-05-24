@@ -1,5 +1,8 @@
 # NEWS
 
+## May 24, 2019
+- Fixed bug where user's already added stocks were being displayed in Add Symbol page. 
+
 ## May 16, 2019
 - Styling updates when fetching for data
 
