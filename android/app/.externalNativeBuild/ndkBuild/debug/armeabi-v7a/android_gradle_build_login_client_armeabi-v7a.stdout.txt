@@ -1,0 +1,1 @@
+make: `/home/aldenperrine/Downloads/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/obj/local/armeabi-v7a/liblogin_client.so' is up to date.
