@@ -205,7 +205,7 @@ export default class StockList extends Component {
       {
         text: 'Delete',
         backgroundColor: 'red',
-        underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
+        // underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
         onPress: () => { this.confirmDelete(item); }
       },
     ];
@@ -215,7 +215,9 @@ export default class StockList extends Component {
         autoClose={true}
         backgroundColor='transparent'>
          <TouchableOpacity onPress={() => {
-            Alert.alert('clicked ' + item.id)
+            this.props.navigation.navigate('DetailedTicker', {
+              item: item,
+            });
           }}>
         <TickerCard id={item.id} name={item.name} price={item.price} />
         </TouchableOpacity>

@@ -3,8 +3,6 @@ import {
   Text, View, StyleSheet, Alert, ScrollView,
 } from 'react-native';
 import ExpandedMessage from '../Components/ExpandedMessage';
-import styles from '../styles'
-import { SafeAreaView } from 'react-navigation';
 import { Header } from 'react-native-elements'
 
 const termsMsg = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "+ 
@@ -34,7 +32,6 @@ export default class About extends Component {
   render() {
     return (
       <View style={localStyles.container}>
-        {/* TODO: Needs to be edited */}
         <Header
           leftComponent={{
             icon: 'menu',
