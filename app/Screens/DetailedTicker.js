@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     flex: 2,
     paddingTop: 15,
     paddingBottom: 15,
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'row',
     width,
