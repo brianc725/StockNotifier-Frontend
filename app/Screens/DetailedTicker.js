@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
   Text, View, StyleSheet, Dimensions
 } from 'react-native';
-import { Header } from 'react-native-elements'
+import { Header } from 'react-native-elements';
+import StockChart from '../Components/StockChart';
 
 // Don't want this page to show up in the Drawer Navigator 
 class Hidden extends React.Component {
@@ -56,6 +57,11 @@ export default class Detailed extends Component {
           </View>
         </View>
 
+        {horizontalRule}
+        <StockChart support={item.support}
+          resistance={item.resistance}
+          current={item.price}
+        />
         {horizontalRule}
 
         {/* Support Resistance Information */}
