@@ -14,9 +14,9 @@ const uint32_t prime[32] = {0xB10B8F96, 0xA080E01D, 0xDE92DE5E, 0xAE5D54EC,
 			    0x4EFFD6FA, 0xE5644738, 0xFAA31A4F, 0xF55BCCC0,
 			    0xA151AF5F, 0x0DC8B4BD, 0x45BF37DF, 0x365C1A65,
 			    0xE68CFDA7, 0x6D4DA708, 0xDF1FB2BC, 0x2E4A4371};
-
+	
 const uint32_t gener[32] = {0xA4D1CBD5, 0xC3FD3412, 0x6765A442, 0xEFB99905,
-			    0xF8104DD2, 0x58AC507F, 0xD6406CFF, 0x14266D31,
+			    0xF8104DD2, 0x58AC507F, 0xD6406CFF, 0x14266D31, 
 			    0x266FEA1E, 0x5C41564B, 0x777E690F, 0x5504F213,
 			    0x160217B4, 0xB01B886A, 0x5E91547F, 0x9E2749F4,
 			    0xD7FBD7D3, 0xB9A92EE1, 0x909D0D22, 0x63F80A76,
@@ -30,9 +30,10 @@ mpz_t g;
 mpz_t k;
 
 const int BYTES_SIZE = sizeof(prime);
-const int HASH_SIZE =
-  crypto_generichash_BYTES_MAX < BYTES_SIZE ?
+const int HASH_SIZE = 
+  crypto_generichash_BYTES_MAX < BYTES_SIZE ? 
   crypto_generichash_BYTES_MAX : BYTES_SIZE;
+const int KEY_SIZE = 32;
 
 int lib_bytes_size() {
   return BYTES_SIZE;
@@ -42,6 +43,10 @@ int lib_hash_size() {
   return HASH_SIZE;
 }
 
+int lib_key_size() {
+  return KEY_SIZE;
+}
+
 int init_client_lib() {
   if (is_initialized) {
     return 0;
@@ -49,9 +54,9 @@ int init_client_lib() {
   if (sodium_init() < 0) {
     return 1;
   }
-
+  
   /* Initialize N, a large prime which is the base for the ring of integers */
-
+  
   mpz_init(N);
   mpz_import(N, 32, 1, 4, 0, 0, prime);
 
@@ -74,7 +79,7 @@ int init_client_lib() {
   return 0;
 }
 
-int generate_registration(const char* user_pass_in, unsigned char* s_bytes_out,
+int generate_registration(const char* user_pass_in, unsigned char* s_bytes_out, 
 			  unsigned char* v_bytes_out) {
   mpz_t x, v;
   mpz_init(x);
@@ -91,11 +96,11 @@ int generate_registration(const char* user_pass_in, unsigned char* s_bytes_out,
 
   mpz_import(x, HASH_SIZE, -1, 1, 0, 0, hash);
   mpz_powm(v, g, x, N);
-
+  
   if (mpz_size(v)*sizeof(mp_limb_t) > BYTES_SIZE) {
     return 1;
   }
-
+  
   mpz_export(v_bytes_out, NULL, -1, 1, 0, 0, v);
   return 0;
 }
@@ -104,10 +109,10 @@ int generate_a(unsigned char* a_bytes_out, unsigned char* A_bytes_out) {
   mpz_t a, A;
   mpz_init(a);
   mpz_init(A);
-
+  
   randombytes_buf(a_bytes_out, BYTES_SIZE);
   mpz_import(a, BYTES_SIZE, -1, 1, 0, 0, a_bytes_out);
-
+  
   mpz_powm(A, g, a, N);
   if (mpz_size(A)*sizeof(mp_limb_t) > BYTES_SIZE) {
     return 1;
@@ -116,10 +121,17 @@ int generate_a(unsigned char* a_bytes_out, unsigned char* A_bytes_out) {
   return 0;
 }
 
-int generate_cs(const char* user_pass_in, const unsigned char* a_bytes_in,
-		const unsigned char* A_bytes_in, const unsigned char* B_bytes_in,
-		const unsigned char* salt_bytes_in, unsigned char* cs_bytes_out,
-		unsigned char* m1_bytes_out, unsigned char* m2_bytes_out) {
+int generate_ck(const char* username_in,
+		const char* user_pass_in,
+	        const unsigned char* a_bytes_in,
+		const unsigned char* A_bytes_in,
+	        const unsigned char* B_bytes_in,
+		const unsigned char* s_bytes_in,
+		const unsigned char* nonce_bytes_in,
+	        unsigned char* k_bytes_out,
+		unsigned char* m1_bytes_out,
+	        unsigned char* m2_bytes_out,
+		unsigned char* hn_bytes_out) {
   mpz_t a, A, B, u, x, cs, cb, ce;
   mpz_init(a);
   mpz_init(A);
@@ -139,15 +151,25 @@ int generate_cs(const char* user_pass_in, const unsigned char* a_bytes_in,
   mpz_import(u, sizeof(u_bytes), -1, 1, 0, 0, u_bytes);
   mpz_import(a, BYTES_SIZE, -1, 1, 0, 0, a_bytes_in);
   mpz_import(B, BYTES_SIZE, -1, 1, 0, 0, B_bytes_in);
-
+  
   unsigned char hash[HASH_SIZE];
   crypto_generichash_init(&h_state, NULL, 0, HASH_SIZE);
-  crypto_generichash_update(&h_state, (unsigned char*) salt_bytes_in, BYTES_SIZE);
+  crypto_generichash_update(&h_state, (unsigned char*) s_bytes_in, BYTES_SIZE);
   crypto_generichash_update(&h_state, (unsigned char*) user_pass_in, strlen(user_pass_in));
   crypto_generichash_final(&h_state, hash, sizeof hash);
   mpz_import(x, HASH_SIZE, -1, 1, 0, 0, hash);
 
   mpz_powm(cb, g, x, N);
+
+  unsigned char v_bytes[BYTES_SIZE];
+  mpz_export(v_bytes, NULL, -1, 1, 0, 0, cb);
+
+  crypto_generichash_state hs;
+  crypto_generichash_init(&hs, NULL, 0, KEY_SIZE);
+  crypto_generichash_update(&hs, v_bytes, BYTES_SIZE);
+  crypto_generichash_update(&hs, nonce_bytes_in, KEY_SIZE);
+  crypto_generichash_final(&hs, hn_bytes_out, KEY_SIZE);
+
   mpz_mul(cb, cb, k);
   mpz_sub(cb, B, cb);
   mpz_mod(cb, cb, N);
@@ -158,18 +180,26 @@ int generate_cs(const char* user_pass_in, const unsigned char* a_bytes_in,
   if (mpz_size(cs)*sizeof(mp_limb_t) > BYTES_SIZE) {
     return 1;
   }
-  mpz_export(cs_bytes_out, NULL, -1, 1, 0, 0, cs);
 
+  unsigned char cs_bytes[BYTES_SIZE];
+  mpz_export(cs_bytes, NULL, -1, 1, 0, 0, cs);
+  
+  crypto_generichash_init(&h_state, NULL, 0, KEY_SIZE);
+  crypto_generichash_update(&h_state, cs_bytes, BYTES_SIZE);
+  crypto_generichash_final(&h_state, k_bytes_out, KEY_SIZE);
+  
   crypto_generichash_init(&h_state, NULL, 0, HASH_SIZE);
+  crypto_generichash_update(&h_state, (const unsigned char*)username_in, strlen(username_in));
+  crypto_generichash_update(&h_state, s_bytes_in, BYTES_SIZE);
   crypto_generichash_update(&h_state, A_bytes_in, BYTES_SIZE);
   crypto_generichash_update(&h_state, B_bytes_in, BYTES_SIZE);
-  crypto_generichash_update(&h_state, cs_bytes_out, BYTES_SIZE);
+  crypto_generichash_update(&h_state, k_bytes_out, KEY_SIZE);
   crypto_generichash_final(&h_state, m1_bytes_out, HASH_SIZE);
 
   crypto_generichash_init(&h_state, NULL, 0, HASH_SIZE);
   crypto_generichash_update(&h_state, A_bytes_in, BYTES_SIZE);
   crypto_generichash_update(&h_state, m1_bytes_out, HASH_SIZE);
-  crypto_generichash_update(&h_state, cs_bytes_out, BYTES_SIZE);
+  crypto_generichash_update(&h_state, k_bytes_out, KEY_SIZE);
   crypto_generichash_final(&h_state, m2_bytes_out, HASH_SIZE);
 
   return 0;
