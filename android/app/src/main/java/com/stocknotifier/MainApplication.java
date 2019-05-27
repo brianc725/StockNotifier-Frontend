@@ -26,10 +26,10 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new AsyncStoragePackage(),
-            new VectorIconsPackage(),
-            new RNGestureHandlerPackage()
-      );
+	  new AsyncStoragePackage(),
+	  new VectorIconsPackage(),
+	  new RNGestureHandlerPackage(),
+	  new ClientLoginPackage());
     }
 
     @Override

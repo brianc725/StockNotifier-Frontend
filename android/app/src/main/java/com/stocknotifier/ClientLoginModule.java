@@ -34,7 +34,7 @@ public class ClientLoginModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void promiseTest(Promise p) {
-	p.resolve("Success")
+	p.resolve("Success");
     }
     
     @ReactMethod
@@ -60,13 +60,14 @@ public class ClientLoginModule extends ReactContextBaseJavaModule {
 	    RegistrationValues rvals = jni_generate_registration(userpass);
 	    p.resolve("Success");
 	} else {
-	    p.reject("ERR", "Library not initialized")
+	    p.reject("ERR", "Library not initialized");
 	}
     }
 
     @ReactMethod
     public void generateKey(String username, String userpass, String aHex,
-			    String AHex, String BHex, String sHex, String nHex) {
+			    String AHex, String BHex, String sHex,
+			    String nHex, Promise p) {
 	if (!isInit) {
 	    p.reject("ERR", "Library not initialized");
 	    return;
