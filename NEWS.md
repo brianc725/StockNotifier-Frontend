@@ -1,5 +1,8 @@
 # NEWS
 
+## May 29, 2019
+- Added Privacy Policy 
+
 ## May 24, 2019
 - Added Bar Chart displaying the current price in comparison to Resistance and Support levels
 - Added ability to view detailed ticker information displaying current price, support and resistance levels, and strengths.

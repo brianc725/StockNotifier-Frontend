@@ -11,7 +11,7 @@ import Login from './Screens/Login';
 import Register from './Screens/Register';
 import StockList from './Screens/StockList';
 import AuthLoading from './Screens/AuthLoading';
-import About from './Screens/About';
+import Privacy from './Screens/Privacy';
 import DetailedTicker from './Screens/DetailedTicker';
 import Landing from './Screens/Landing';
 import DrawerSignout from './Components/DrawerSignout';
@@ -22,7 +22,7 @@ const AppScreens = createDrawerNavigator(
   {
     StockList: StockList,
     ManageTickers: ManageTickers, 
-    About: About,  
+    Privacy: Privacy,  
     DetailedTicker: DetailedTicker,
   },
   {

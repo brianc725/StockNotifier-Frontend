@@ -43,5 +43,3 @@ the `react-native run-android` command. To do so, CD into `./app/Scripts/`.
 The Stock Notification App has the purpose of allowing users to follow tickers 
 and receive notifications for when it hits a support or resistance line. It is 
 developed in React Native with primary build target of Android. 
-
-## Features
