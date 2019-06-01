@@ -1,3 +1,9 @@
+/******************
+ * YAxis and BarChart Code was adapted and altered from example provided at
+ * https://github.com/JesperLekland/react-native-svg-charts-examples/blob/master/storybook/stories/bar-chart/horizontal-with-axis.js
+ * under MIT license
+ ******************/
+
 import React from 'react'
 import { View, Text } from 'react-native'
 import { BarChart, Grid, YAxis } from 'react-native-svg-charts'
