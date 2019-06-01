@@ -1,5 +1,8 @@
 # NEWS
 
+## June 1, 2019
+- More efficient Add Symbols list, only displays 20 at a time 
+
 ## May 29, 2019
 - Added Privacy Policy 
 
