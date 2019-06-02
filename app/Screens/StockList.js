@@ -11,7 +11,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import Swipeout from 'react-native-swipeout';
 import _ from 'lodash';
 
-const API_URL = Platform.OS == 'ios' ? "http://localhost:5000/tickers" : "http://10.0.2.2:5000/tickers"
+const API_URL = 'http://cs130-stock-notifier-http-server.us-west-1.elasticbeanstalk.com/user_tickers';
 
 // The filter picker options 
 const pickerValues = [
@@ -62,19 +62,29 @@ export default class StockList extends Component {
   async grabData() {
     let temp;
 
+    // TODO: load this stuff in from async storage
+    const body = {
+      username: 'brian',
+      session_id: '0747f11d56c721d49fae05e96abf261c192503b6bf59a2897f069738c3cbe8ff',
+    }
+
     // Fetch the data from the API 
-    await fetch(API_URL)
+    await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    })
       .then((response) => { return response.json(); })
       .then((data) => {
         temp = data;
-
         // Get last synced time 
         const time = new Date().toLocaleString();
 
-        // Currently data is returned in 'tickers'
         this.setState({
-          ticker_data: temp.tickers,
-          full_ticker_data: temp.tickers,
+          ticker_data: temp,
+          full_ticker_data: temp,
           lastUpdated: time,
         });
       })
@@ -137,8 +147,8 @@ export default class StockList extends Component {
       // 10, 40, 200, 3000
       case 'incrPrice':
         return ticker_data.sort((a, b) => {
-          var aPrice = parseFloat(a.price);
-          var bPrice = parseFloat(b.price)
+          var aPrice = parseFloat(a.last);
+          var bPrice = parseFloat(b.last)
 
           // If any of the prices are NaN, just treat as Infinity 
           if (isNaN(aPrice)) {
@@ -153,8 +163,8 @@ export default class StockList extends Component {
       // 3000, 200, 40, 10
       case 'decrPrice':
         return ticker_data.sort((a, b) => {
-          var aPrice = parseFloat(a.price);
-          var bPrice = parseFloat(b.price)
+          var aPrice = parseFloat(a.last);
+          var bPrice = parseFloat(b.last)
 
           // If any of the prices are NaN, just treat as Infinity 
           if (isNaN(aPrice)) {
@@ -219,7 +229,7 @@ export default class StockList extends Component {
               item: item,
             });
           }}>
-        <TickerCard id={item.symbol} name={item.name} price={item.price} />
+        <TickerCard id={item.symbol} name={item.name} price={item.last} />
         </TouchableOpacity>
       </Swipeout>
     );

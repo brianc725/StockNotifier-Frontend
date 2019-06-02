@@ -53,14 +53,14 @@ export default class Detailed extends Component {
             <Text style={styles.nameText}>{item.name}</Text>
           </View>
           <View>
-            <Text style={styles.priceText}>${item.price}</Text>
+            <Text style={styles.priceText}>${item.last}</Text>
           </View>
         </View>
 
         {horizontalRule}
         <StockChart support={item.support}
           resistance={item.resistance}
-          current={item.price}
+          current={item.last}
         />
         {horizontalRule}
 

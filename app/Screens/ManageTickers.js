@@ -94,9 +94,8 @@ export default class ManageTickers extends Component {
 
     // Remove tickers that the user has already added
     // Written by Vincent 
-    // TODO: Change id to symbol 
     let removedTickers = sortedTickers.filter(stock =>
-      !userTickers.map(elem => elem.id).includes(stock.symbol));
+      !userTickers.map(elem => elem.symbol).includes(stock.symbol));
 
     // Limit amount displayed
     let resulting = removedTickers.slice(0, offset * ITEMS_PER_PAGE);
@@ -116,7 +115,6 @@ export default class ManageTickers extends Component {
 
   // Save the current query string from the user 
   handleSearch = search => {
-    // console.log("search", search)
     const formatSearch = search.toLowerCase();
     // Filter for results via contain function
     const tickers = _.filter(this.state.allTickers, item => {
@@ -154,9 +152,8 @@ export default class ManageTickers extends Component {
       const userTickers = navigation.getParam('userTickers');
 
       // Array of tickers that were same
-      // TODO: Change id to symbol 
       let duplicatedTickers = tickers.filter(stock =>
-        userTickers.map(elem => elem.id).includes(stock.symbol));
+        userTickers.map(elem => elem.symbol).includes(stock.symbol));
       // Number of tickers remaining that user could add 
       const totalNonUserTickers = tickers.length - duplicatedTickers.length;
 
