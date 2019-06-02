@@ -19,7 +19,7 @@ class Hidden extends React.Component {
   }
 }
 
-const NYSE_URL = Platform.OS == 'ios' ? "http://localhost:5000/nyse" : "http://10.0.2.2:5000/nyse"
+const NYSE_URL = `http://cs130-stock-notifier-http-server.us-west-1.elasticbeanstalk.com/all_tickers`;
 const ITEMS_PER_PAGE = 20;
 
 // This class is for adding new stock tickers 
@@ -51,8 +51,8 @@ export default class ManageTickers extends Component {
 
       // Currently data is returned in 'nyse'
       this.setState({
-        tickers: tempJSON.nyse,
-        allTickers: tempJSON.nyse,
+        tickers: tempJSON,
+        allTickers: tempJSON,
       });
     }
     else {
@@ -67,8 +67,8 @@ export default class ManageTickers extends Component {
 
           // Currently data is returned in 'nyse'
           this.setState({
-            tickers: stuff.nyse,
-            allTickers: stuff.nyse,
+            tickers: stuff,
+            allTickers: stuff,
           });
         })
         .catch((error) => { console.log(error); });
@@ -80,7 +80,7 @@ export default class ManageTickers extends Component {
     drawerLabel: <Hidden />,
   };
 
-  _keyExtractor = (item) => item.id;
+  _keyExtractor = (item) => item.symbol;
 
   filterData = () => {
     const { navigation } = this.props;
@@ -89,13 +89,14 @@ export default class ManageTickers extends Component {
 
     // Sort all Tickers
     let sortedTickers = tickers.sort((a, b) => {
-      return a.id.toLowerCase() >= b.id.toLowerCase();
+      return a.symbol.toLowerCase() >= b.symbol.toLowerCase();
     });
 
     // Remove tickers that the user has already added
     // Written by Vincent 
+    // TODO: Change id to symbol 
     let removedTickers = sortedTickers.filter(stock =>
-      !userTickers.map(elem => elem.id).includes(stock.id));
+      !userTickers.map(elem => elem.id).includes(stock.symbol));
 
     // Limit amount displayed
     let resulting = removedTickers.slice(0, offset * ITEMS_PER_PAGE);
@@ -153,8 +154,9 @@ export default class ManageTickers extends Component {
       const userTickers = navigation.getParam('userTickers');
 
       // Array of tickers that were same
+      // TODO: Change id to symbol 
       let duplicatedTickers = tickers.filter(stock =>
-        userTickers.map(elem => elem.id).includes(stock.id));
+        userTickers.map(elem => elem.id).includes(stock.symbol));
       // Number of tickers remaining that user could add 
       const totalNonUserTickers = tickers.length - duplicatedTickers.length;
 
@@ -182,7 +184,7 @@ export default class ManageTickers extends Component {
           <FlatList
             data={displayData}
             renderItem={({ item }) =>
-              <TickerCard id={item.id} name={item.name} price={'ADD'} />}
+              <TickerCard id={item.symbol} name={item.name} price={'ADD'} />}
             keyExtractor={this._keyExtractor}
             ListHeaderComponent={
               <View>

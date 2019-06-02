@@ -81,7 +81,7 @@ export default class StockList extends Component {
       .catch((error) => { console.log(error); });
   }
 
-  _keyExtractor = (item) => item.id;
+  _keyExtractor = (item) => item.symbol;
 
   // Save the current query string from the user 
   handleSearch = search => {
@@ -127,12 +127,12 @@ export default class StockList extends Component {
       // Apple, Boeing, Delta, Snap
       case 'azID':
         return ticker_data.sort((a, b) => {
-          return a.id.toLowerCase() >= b.id.toLowerCase();
+          return a.symbol.toLowerCase() >= b.symbol.toLowerCase();
         });
       // Snap, Delta, Boeing, Apple
       case 'zaID':
         return ticker_data.sort((a, b) => {
-          return a.id.toLowerCase() <= b.id.toLowerCase();
+          return a.symbol.toLowerCase() <= b.symbol.toLowerCase();
         });
       // 10, 40, 200, 3000
       case 'incrPrice':
@@ -182,7 +182,7 @@ export default class StockList extends Component {
 
   // Confirm deletion of the stock ticker
   confirmDelete(item) {
-    const tickerID = item.id
+    const tickerID = item.symbol
 
     Alert.alert(
       'Are you sure you want to delete?',
@@ -219,7 +219,7 @@ export default class StockList extends Component {
               item: item,
             });
           }}>
-        <TickerCard id={item.id} name={item.name} price={item.price} />
+        <TickerCard id={item.symbol} name={item.name} price={item.price} />
         </TouchableOpacity>
       </Swipeout>
     );

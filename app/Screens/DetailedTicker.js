@@ -40,7 +40,7 @@ export default class Detailed extends Component {
             color: '#fff',
             onPress: () => this.props.navigation.goBack(),
           }}
-          centerComponent={{ text: item.id, style: { color: '#fff' } }}
+          centerComponent={{ text: item.symbol, style: { color: '#fff' } }}
           containerStyle={{
             backgroundColor: '#5E8D93',
           }}
@@ -49,7 +49,7 @@ export default class Detailed extends Component {
         {/* Standard information */}
         <View style={styles.card}>
           <View>
-            <Text style={styles.idText}>{item.id}</Text>
+            <Text style={styles.idText}>{item.symbol}</Text>
             <Text style={styles.nameText}>{item.name}</Text>
           </View>
           <View>
