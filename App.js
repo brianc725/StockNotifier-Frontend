@@ -7,7 +7,6 @@
  */
 
 import React, { Component } from 'react';
-import Navigator from './app/Navigator';
 // import { Platform, StyleSheet, Text, View } from 'react-native';
 // import Login from './app/Screens/Login';
 // import StockList from './app/Screens/StockList';
