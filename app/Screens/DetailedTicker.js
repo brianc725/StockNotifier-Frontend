@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import {
-  Text, View, StyleSheet, Dimensions
+  Text, View, StyleSheet, Dimensions, ScrollView,
 } from 'react-native';
 import { Header } from 'react-native-elements';
 import StockChart from '../Components/StockChart';
+import SupportResistData from '../Components/SupportResistData';
 
 // Don't want this page to show up in the Drawer Navigator 
 class Hidden extends React.Component {
@@ -27,6 +28,17 @@ export default class Detailed extends Component {
   static navigationOptions = {
     drawerLabel: <Hidden />,
   };
+
+  renderSupports(supports) {
+    supports.map((support) => {
+      return (
+        <View style={styles.infoContainer}>
+          <Text style={styles.idText}>Support(s)</Text>
+          <SupportResistData item={support} />
+        </View>
+      );
+    });
+  }
 
   render() {
     const { navigation } = this.props;
@@ -58,26 +70,37 @@ export default class Detailed extends Component {
         </View>
 
         {horizontalRule}
-        <StockChart support={item.support}
-          resistance={item.resistance}
+        <StockChart support={item.supports[0]}
+          resistance={item.resistances[0]}
           current={item.last}
         />
         {horizontalRule}
 
         {/* Support Resistance Information */}
-        <View style={styles.card}>
-          <View style={styles.infoContainer}>
-            <Text style={styles.idText}>Support</Text>
-            <Text style={styles.infoText}>${item.support}</Text>
-            <Text style={styles.infoText}>Strength: {item.support_strength}</Text>
+        <ScrollView style={{ flex: 1, }}>
+          <View style={styles.card}>
+            <View style={styles.infoContainer}>
+              <Text style={styles.idText}>Support(s)</Text>
+              {
+                item.supports.map((item) =>
+                  <View style={styles.infoSpacing} key={item.price}>
+                    <SupportResistData item={item} />
+                  </View>
+                )
+              }
+            </View>
+            <View style={styles.infoContainer}>
+              <Text style={styles.idText}>Resistance(s)</Text>
+              {
+                item.resistances.map((item) =>
+                  <View style={styles.infoSpacing} key={item.price}>
+                    <SupportResistData item={item} />
+                  </View>
+                )
+              }
+            </View>
           </View>
-          <View style={styles.infoContainer}>
-            <Text style={styles.idText}>Resistance</Text>
-            <Text style={styles.infoText}>${item.resistance}</Text>
-            <Text style={styles.infoText}>Strength: {item.resistance_strength}</Text>
-          </View>
-        </View>
-
+        </ScrollView>
 
       </View>
     );
@@ -106,7 +129,7 @@ const text = {
 
 const styles = StyleSheet.create({
   card: {
-    flex: 2,
+    flex: 1,
     paddingTop: 15,
     paddingBottom: 15,
     justifyContent: 'space-around',
@@ -134,5 +157,15 @@ const styles = StyleSheet.create({
   infoText: {
     ...text,
     fontSize: 16,
-  }
+  },
+  left: {
+    backgroundColor: 'green',
+  },
+  right: {
+    backgroundColor: 'red',
+  },
+  infoSpacing: {
+    marginTop: 10,
+    marginBottom: 10,
+  },
 });

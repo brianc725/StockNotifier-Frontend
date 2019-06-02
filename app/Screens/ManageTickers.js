@@ -8,7 +8,6 @@ import { SafeAreaView } from 'react-navigation';
 import { Header, SearchBar } from 'react-native-elements'
 import AsyncStorage from '@react-native-community/async-storage';
 import TickerCard from '../Components/TickerCard';
-import PrimaryButton from '../Components/PrimaryButton';
 import { contains } from '../Scripts/Search';
 import _ from 'lodash';
 
