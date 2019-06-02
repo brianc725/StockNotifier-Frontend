@@ -59,12 +59,9 @@
 		3D1E361482074B68A596F0C6 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4AC40E36FEDB4FFDAC5602C3 /* SimpleLineIcons.ttf */; };
 		5E26ECC843124193A3ED2DE3 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7AD260A08A144928BE7C5B85 /* Zocial.ttf */; };
 		5B1A0FF3E4424130B8B88EC2 /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE1C04A64D734AE2BA65FEB4 /* libRNCAsyncStorage.a */; };
-<<<<<<< HEAD
 		36D2C470B227450297CC387B /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7617717960A14BCD862A4E26 /* libRNSVG.a */; };
 		4371DE383E2E4E8F85F412D4 /* libRNSVG-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9B5B51B82F941FA8AAB4937 /* libRNSVG-tvOS.a */; };
-=======
 		E6932CE07E214637A78C2F74 /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE4DA7B85C944CDA99ED7091 /* libRNFirebase.a */; };
->>>>>>> notifications
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1523,7 +1520,6 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1567,7 +1563,6 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
