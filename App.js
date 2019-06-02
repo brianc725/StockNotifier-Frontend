@@ -12,7 +12,7 @@ import Login from './app/Screens/Login';
 import StockList from './app/Screens/StockList';
 import Register from './app/Screens/Register';
 import Navigator from './app/Navigator';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import firebase from 'react-native-firebase';
 
 const instructions = Platform.select({
