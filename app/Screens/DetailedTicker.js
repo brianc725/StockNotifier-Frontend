@@ -29,17 +29,6 @@ export default class Detailed extends Component {
     drawerLabel: <Hidden />,
   };
 
-  renderSupports(supports) {
-    supports.map((support) => {
-      return (
-        <View style={styles.infoContainer}>
-          <Text style={styles.idText}>Support(s)</Text>
-          <SupportResistData item={support} />
-        </View>
-      );
-    });
-  }
-
   render() {
     const { navigation } = this.props;
     const item = navigation.getParam('item');
@@ -157,12 +146,6 @@ const styles = StyleSheet.create({
   infoText: {
     ...text,
     fontSize: 16,
-  },
-  left: {
-    backgroundColor: 'green',
-  },
-  right: {
-    backgroundColor: 'red',
   },
   infoSpacing: {
     marginTop: 10,

@@ -4,6 +4,7 @@
 - Fetches real data for all of the tickers user can select from 
 - Get notifications and display it to user in app and outside of app
 - Fetches real user data and updated supports and resistances in detailed view
+- Add and Delete functionality for an user actually works now
 
 ## June 1, 2019
 - More efficient Add Symbols list, only displays 20 at a time 

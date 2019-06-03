@@ -12,6 +12,7 @@ import Swipeout from 'react-native-swipeout';
 import _ from 'lodash';
 
 const API_URL = 'http://cs130-stock-notifier-http-server.us-west-1.elasticbeanstalk.com/user_tickers';
+const DELETE_URL = 'http://cs130-stock-notifier-http-server.us-west-1.elasticbeanstalk.com/delete_ticker';
 
 // The filter picker options 
 const pickerValues = [
@@ -54,6 +55,10 @@ export default class StockList extends Component {
   };
 
   async componentDidMount() {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+      this.grabData();
+    });
+
     this.grabData()
   }
 
@@ -183,11 +188,33 @@ export default class StockList extends Component {
   }
 
   // Handle the deletion of the ticker 
-  handleDelete(item) {
-    Alert.alert('Deleted not implemented!');
-    // Call the API with the API to be deleted 
+  async handleDelete(item) {
+    // TODO: load this stuff in from async storage
+    const body = {
+      username: 'brian',
+      session_id: '0747f11d56c721d49fae05e96abf261c192503b6bf59a2897f069738c3cbe8ff',
+      tickers: [item],
+    };
 
-    // Alert.alert('Deleted ' + item.id);
+    // Fetch the data from the API 
+    await fetch(DELETE_URL, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((response) => { return response.json(); })
+      .then((data) => {
+        Alert.alert(item + ' was deleted!');
+      })
+      .catch((error) => {
+        console.log(error);
+        Alert.alert(item + ' failed to be deleted at this time');
+      });
+
+    // Refresh
+    this.grabData();
   }
 
   // Confirm deletion of the stock ticker
@@ -203,7 +230,7 @@ export default class StockList extends Component {
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        { text: 'OK', onPress: () => this.handleDelete(item) }
+        { text: 'OK', onPress: () => this.handleDelete(tickerID) }
       ],
       { cancelable: false },
     );
