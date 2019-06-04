@@ -30,13 +30,14 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new SvgPackage(),
-            new RNFirebasePackage(),
-            new RNFirebaseMessagingPackage(),
-            new RNFirebaseNotificationsPackage(),
-            new AsyncStoragePackage(),
-            new VectorIconsPackage(),
-            new RNGestureHandlerPackage()
+	        new ClientLoginPackage());
+          new SvgPackage(),
+          new RNFirebasePackage(),
+          new RNFirebaseMessagingPackage(),
+          new RNFirebaseNotificationsPackage(),
+          new AsyncStoragePackage(),
+          new VectorIconsPackage(),
+          new RNGestureHandlerPackage()
       );
     }
 

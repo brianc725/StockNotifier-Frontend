@@ -1,0 +1,3 @@
+C:/Users/Vincent/AppData/Local/Android/Sdk/ndk-bundle/build//../build/core
+D:/cs130/StockNotifier-Frontend/android/app/src/main/jni/cincludes/armv7/
+make: `D:/cs130/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/obj/local/armeabi-v7a/liblogin_client.so' is up to date.
