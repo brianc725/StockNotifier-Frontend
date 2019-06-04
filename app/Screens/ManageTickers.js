@@ -128,6 +128,12 @@ export default class ManageTickers extends Component {
     });
   }
 
+  resetClear = () => {
+    AsyncStorage.removeItem('ALL_TICKERS');
+    this.grabData();
+    this.resetOffset();
+  }
+
   render() {
     let { search, tickers } = this.state;
 
@@ -163,6 +169,7 @@ export default class ManageTickers extends Component {
               text: 'Reset',
               style: { color: '#fff' },
               onPress: () => this.resetOffset(),
+              onLongPress: () => this.resetClear(),
             }}
             centerComponent={{ 
               text: 'Add Symbols', 

@@ -1,5 +1,8 @@
 # NEWS
 
+## June 3, 2019
+- Reset button logic adjusted in manage tickers, quick press for resetting number of displayed tickers, long press for full refresh of tickers from database.
+
 ## June 2, 2019
 - Fetches real data for all of the tickers user can select from 
 - Get notifications and display it to user in app and outside of app
