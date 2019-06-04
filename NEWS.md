@@ -1,5 +1,28 @@
 # NEWS
 
+## June 3, 2019
+- Reset button logic adjusted in manage tickers, quick press for resetting number of displayed tickers, long press for full refresh of tickers from database.
+
+## June 2, 2019
+- Fetches real data for all of the tickers user can select from 
+- Get notifications and display it to user in app and outside of app
+- Fetches real user data and updated supports and resistances in detailed view
+- Add and Delete functionality for an user actually works now
+
+## June 1, 2019
+- More efficient Add Symbols list, only displays 20 at a time 
+
+## May 29, 2019
+- Added Privacy Policy 
+
+## May 24, 2019
+- Added Bar Chart displaying the current price in comparison to Resistance and Support levels
+- Added ability to view detailed ticker information displaying current price, support and resistance levels, and strengths.
+- Fixed bug where user's already added stocks were being displayed in Add Symbol page. 
+
+## May 16, 2019
+- Styling updates when fetching for data
+
 ## May 14, 2019
 - Added ability to delete stocks via swipe left
 

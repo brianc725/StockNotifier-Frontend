@@ -8,7 +8,6 @@ import { SafeAreaView } from 'react-navigation';
 import { Header, SearchBar } from 'react-native-elements'
 import AsyncStorage from '@react-native-community/async-storage';
 import TickerCard from '../Components/TickerCard';
-import PrimaryButton from '../Components/PrimaryButton';
 import { contains } from '../Scripts/Search';
 import _ from 'lodash';
 
@@ -19,7 +18,7 @@ class Hidden extends React.Component {
   }
 }
 
-const NYSE_URL = Platform.OS == 'ios' ? "http://localhost:5000/nyse" : "http://10.0.2.2:5000/nyse"
+const NYSE_URL = `http://cs130-stock-notifier-http-server.us-west-1.elasticbeanstalk.com/all_tickers`;
 const ITEMS_PER_PAGE = 20;
 
 // This class is for adding new stock tickers 
@@ -28,11 +27,11 @@ export default class ManageTickers extends Component {
     super(props);
     this.state = {
       search: "",
+      // tickers is the tickers for user to display, dynamic
       tickers: undefined,
-      // all of the data received by the api call for "restoring" after search filtering
-      all_tickers: [],
-      // Remove this, this is passed via props
-      userTickers: [],
+      // all Tickers is all of the tickers for API for search, static
+      allTickers: [],
+      offset: 1,
     };
   }
 
@@ -51,8 +50,8 @@ export default class ManageTickers extends Component {
 
       // Currently data is returned in 'nyse'
       this.setState({
-        tickers: tempJSON.nyse,
-        all_tickers: tempJSON.nyse,
+        tickers: tempJSON,
+        allTickers: tempJSON,
       });
     }
     else {
@@ -67,8 +66,8 @@ export default class ManageTickers extends Component {
 
           // Currently data is returned in 'nyse'
           this.setState({
-            tickers: stuff.nyse,
-            all_tickers: stuff.nyse,
+            tickers: stuff,
+            allTickers: stuff,
           });
         })
         .catch((error) => { console.log(error); });
@@ -80,36 +79,59 @@ export default class ManageTickers extends Component {
     drawerLabel: <Hidden />,
   };
 
-  _keyExtractor = (item) => item.id;
+  _keyExtractor = (item) => item.symbol;
 
   filterData = () => {
     const { navigation } = this.props;
-    const { tickers } = this.state;
+    const { tickers, offset } = this.state;
     const userTickers = navigation.getParam('userTickers');
 
     // Sort all Tickers
     let sortedTickers = tickers.sort((a, b) => {
-      return a.id.toLowerCase() >= b.id.toLowerCase();
+      return a.symbol.toLowerCase() >= b.symbol.toLowerCase();
     });
 
     // Remove tickers that the user has already added
     // Written by Vincent 
     let removedTickers = sortedTickers.filter(stock =>
-      !userTickers.map(elem => elem.id).includes(stock.id));
+      !userTickers.map(elem => elem.symbol).includes(stock.symbol));
+
+    // Limit amount displayed
+    let resulting = removedTickers.slice(0, offset * ITEMS_PER_PAGE);
 
     // Return edited information
-    return removedTickers;
+    return resulting;
+  }
+
+  loadMoreData = () => {
+    const { offset } = this.state;
+    let updatedOffset = offset + 1;
+
+    this.setState({
+      offset: updatedOffset,
+    });
   }
 
   // Save the current query string from the user 
   handleSearch = search => {
-    // console.log("search", search)
     const formatSearch = search.toLowerCase();
     // Filter for results via contain function
-    const tickers = _.filter(this.state.all_tickers, item => {
+    const tickers = _.filter(this.state.allTickers, item => {
       return contains(item, formatSearch);
     });
     this.setState({ search: formatSearch, tickers });
+  }
+
+  resetOffset = () => {
+    this.setState({
+      offset: 1,
+    });
+  }
+
+  resetClear = () => {
+    AsyncStorage.removeItem('ALL_TICKERS');
+    this.grabData();
+    this.resetOffset();
   }
 
   render() {
@@ -121,16 +143,38 @@ export default class ManageTickers extends Component {
         <SafeAreaView style={localStyles.loading}>
           <Text style={localStyles.infoText}>Attempting to get all tickers...</Text>
           <ActivityIndicator size="large" color="#0B3948" />
-          <PrimaryButton onPress={() => this.grabData()}>Refresh Now</PrimaryButton>
+          <Button
+            onPress={() => this.grabData()}
+            title="Refresh Now"
+          />
         </SafeAreaView>
       );
     }
 
     else {
+      const displayData = this.filterData();
+      const { navigation } = this.props;
+      const userTickers = navigation.getParam('userTickers');
+
+      // Array of tickers that were same
+      let duplicatedTickers = tickers.filter(stock =>
+        userTickers.map(elem => elem.symbol).includes(stock.symbol));
+      // Number of tickers remaining that user could add 
+      const totalNonUserTickers = tickers.length - duplicatedTickers.length;
+
       return (
         <View style={localStyles.container}>
           <Header
-            centerComponent={{ text: 'Add Symbols', style: { color: '#fff' } }}
+            leftComponent={{
+              text: 'Reset',
+              style: { color: '#fff' },
+              onPress: () => this.resetOffset(),
+              onLongPress: () => this.resetClear(),
+            }}
+            centerComponent={{ 
+              text: 'Add Symbols', 
+              style: { color: '#fff' } 
+            }}
             rightComponent={{
               icon: 'done',
               color: '#fff',
@@ -141,9 +185,9 @@ export default class ManageTickers extends Component {
             }}
           />
           <FlatList
-            data={this.filterData()}
+            data={displayData}
             renderItem={({ item }) =>
-              <TickerCard id={item.id} name={item.name} price={'ADD'} />}
+              <TickerCard id={item.symbol} name={item.name} price={'ADD'} />}
             keyExtractor={this._keyExtractor}
             ListHeaderComponent={
               <View>
@@ -151,12 +195,18 @@ export default class ManageTickers extends Component {
               </View>
             }
             ListFooterComponent={
-              // Showing ... of tickers.length. 
               <View>
-                {/* Need special case if on page tickers shown is > tickers.length  */}
-                <Text style={localStyles.footerText}>Showing ___ of {this.state.tickers.length}</Text>
-                {/* Change this to a button */}
-                {this.state.tickers.length != 0 && <Text style={localStyles.footerText}>Load more...</Text>}
+                <Text style={localStyles.footerText}>Showing {displayData.length} of {totalNonUserTickers}</Text>
+                {
+                  this.state.tickers.length != 0
+                  &&
+                  displayData.length < totalNonUserTickers
+                  &&
+                  <Button
+                    onPress={() => this.loadMoreData()}
+                    title="Load More"
+                  />
+                }
               </View>
             }
           />

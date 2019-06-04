@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   View, TextInput, Text, Animated
 } from 'react-native';
-import styles from '../styles';
+import styles, { Colors} from '../styles';
 import PrimaryButton from './PrimaryButton';
 
 export default class RegisterForm extends Component {
@@ -31,6 +31,10 @@ export default class RegisterForm extends Component {
         passwordAgain: new Animated.Value(0),
       }
     };
+  }
+
+  onSignUp() {
+    alert('not implemented')
   }
 
   validate(username, password, passwordAgain) {
@@ -72,21 +76,24 @@ export default class RegisterForm extends Component {
   }
 
   labelStyle(field) {
-    const top = this.state.slidingAnims[field].interpolate({
-      inputRange: [0, 1],
-      outputRange: [30, 10],
-    });
 
-    const fontSize = this.state.slidingAnims[field].interpolate({
-      inputRange: [0, 1],
-      outputRange: [16, 12],
-    });
 
     return {
       position: 'absolute',
       left: 0,
-      top: top,
-      fontSize: fontSize,
+      fontSize: (
+        this.state.slidingAnims[field].interpolate({
+          inputRange: [0, 1],
+          outputRange: [16, 12],
+        })),
+      transform: [
+        {
+          translateY: this.state.slidingAnims[field].interpolate({
+            inputRange: [0, 1],
+            outputRange: [30, 10],
+          })
+        }
+      ],
       color: 'rgba(0,0,0,0.5)'
     };
   }
@@ -119,7 +126,7 @@ export default class RegisterForm extends Component {
           </Animated.Text>
           <TextInput
             style={shouldMarkError('username') ? styles.badInput : styles.input}
-            autoCapitalize="none" 
+            autoCapitalize="none"
             onSubmitEditing={() => this.passwordInput.focus()}
             onChangeText={(text) => this.setState({fields: {...this.state.fields, username: text}})}
             onBlur={this.handleBlur('username')}
@@ -166,7 +173,7 @@ export default class RegisterForm extends Component {
           <Text style={styles.errmsg}>{this.errmsg('passwordAgain', 0)}</Text>
         </View>
 
-        <PrimaryButton onPress={this.onSignIn}>
+        <PrimaryButton onPress={this.onSignUp}>
           Sign Up
         </PrimaryButton>
         
