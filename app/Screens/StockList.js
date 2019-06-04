@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import {
   Text, View, TouchableOpacity, FlatList, StyleSheet, Dimensions,
-  ActivityIndicator, Alert, Platform, Modal, TouchableHighlight
+  ActivityIndicator, Alert, Platform, Modal, TouchableHighlight, 
 } from 'react-native';
 import TickerCard from '../Components/TickerCard';
 import { contains } from '../Scripts/Search';
-import PrimaryButton from '../Components/PrimaryButton';
 import { SafeAreaView } from 'react-navigation';
 import { Header, SearchBar, Button } from 'react-native-elements'
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import Swipeout from 'react-native-swipeout';
 import _ from 'lodash';
 
-const API_URL = Platform.OS == 'ios' ? "http://localhost:5000/tickers" : "http://10.0.2.2:5000/tickers"
+const API_URL = 'http://cs130-stock-notifier-http-server.us-west-1.elasticbeanstalk.com/user_tickers';
+const DELETE_URL = 'http://cs130-stock-notifier-http-server.us-west-1.elasticbeanstalk.com/delete_ticker';
 
 // The filter picker options 
 const pickerValues = [
@@ -54,6 +55,10 @@ export default class StockList extends Component {
   };
 
   async componentDidMount() {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+      this.grabData();
+    });
+
     this.grabData()
   }
 
@@ -62,26 +67,36 @@ export default class StockList extends Component {
   async grabData() {
     let temp;
 
+    // TODO: load this stuff in from async storage
+    const body = {
+      username: 'brian',
+      session_id: '0747f11d56c721d49fae05e96abf261c192503b6bf59a2897f069738c3cbe8ff',
+    }
+
     // Fetch the data from the API 
-    await fetch(API_URL)
+    await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    })
       .then((response) => { return response.json(); })
       .then((data) => {
         temp = data;
-
         // Get last synced time 
         const time = new Date().toLocaleString();
 
-        // Currently data is returned in 'tickers'
         this.setState({
-          ticker_data: temp.tickers,
-          full_ticker_data: temp.tickers,
+          ticker_data: temp,
+          full_ticker_data: temp,
           lastUpdated: time,
         });
       })
       .catch((error) => { console.log(error); });
   }
 
-  _keyExtractor = (item, index) => item.id;
+  _keyExtractor = (item) => item.symbol;
 
   // Save the current query string from the user 
   handleSearch = search => {
@@ -96,7 +111,11 @@ export default class StockList extends Component {
 
   // Navigate to add ticker page with props of user's ticker data passed in
   onAddSymbolPress() {
-    this.props.navigation.navigate('ManageTickers');
+    const { full_ticker_data } = this.state;
+
+    this.props.navigation.navigate('ManageTickers', {
+      userTickers: full_ticker_data,
+    });
   }
 
   // Toggle the Pop up Picker for Filter options
@@ -123,26 +142,42 @@ export default class StockList extends Component {
       // Apple, Boeing, Delta, Snap
       case 'azID':
         return ticker_data.sort((a, b) => {
-          return a.id.toLowerCase() >= b.id.toLowerCase();
+          return a.symbol.toLowerCase() >= b.symbol.toLowerCase();
         });
       // Snap, Delta, Boeing, Apple
       case 'zaID':
         return ticker_data.sort((a, b) => {
-          return a.id.toLowerCase() <= b.id.toLowerCase();
+          return a.symbol.toLowerCase() <= b.symbol.toLowerCase();
         });
       // 10, 40, 200, 3000
       case 'incrPrice':
         return ticker_data.sort((a, b) => {
-          var aPrice = parseFloat(a.price);
-          var bPrice = parseFloat(b.price)
+          var aPrice = parseFloat(a.last);
+          var bPrice = parseFloat(b.last)
+
+          // If any of the prices are NaN, just treat as Infinity 
+          if (isNaN(aPrice)) {
+            aPrice = Infinity;
+          }
+          if (isNaN(bPrice )) {
+            bPrice = Infinity;
+          }
 
           return aPrice >= bPrice;
         });
       // 3000, 200, 40, 10
       case 'decrPrice':
         return ticker_data.sort((a, b) => {
-          var aPrice = parseFloat(a.price);
-          var bPrice = parseFloat(b.price)
+          var aPrice = parseFloat(a.last);
+          var bPrice = parseFloat(b.last)
+
+          // If any of the prices are NaN, just treat as Infinity 
+          if (isNaN(aPrice)) {
+            aPrice = Infinity;
+          }
+          if (isNaN(bPrice )) {
+            bPrice = Infinity;
+          }
 
           return aPrice <= bPrice;
         });
@@ -150,6 +185,81 @@ export default class StockList extends Component {
       default:
         return ticker_data;
     }
+  }
+
+  // Handle the deletion of the ticker 
+  async handleDelete(item) {
+    // TODO: load this stuff in from async storage
+    const body = {
+      username: 'brian',
+      session_id: '0747f11d56c721d49fae05e96abf261c192503b6bf59a2897f069738c3cbe8ff',
+      tickers: [item],
+    };
+
+    // Fetch the data from the API 
+    await fetch(DELETE_URL, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((response) => { return response.json(); })
+      .then((data) => {
+        Alert.alert(item + ' was deleted!');
+      })
+      .catch((error) => {
+        console.log(error);
+        Alert.alert(item + ' failed to be deleted at this time');
+      });
+
+    // Refresh
+    this.grabData();
+  }
+
+  // Confirm deletion of the stock ticker
+  confirmDelete(item) {
+    const tickerID = item.symbol
+
+    Alert.alert(
+      'Are you sure you want to delete?',
+      tickerID,
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: () => this.handleDelete(tickerID) }
+      ],
+      { cancelable: false },
+    );
+  }
+
+  renderItem(item) {
+    // Buttons
+    let swipeoutBtns = [
+      {
+        text: 'Delete',
+        backgroundColor: 'red',
+        // underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
+        onPress: () => { this.confirmDelete(item); }
+      },
+    ];
+
+    return (
+      <Swipeout right={swipeoutBtns}
+        autoClose={true}
+        backgroundColor='transparent'>
+         <TouchableOpacity onPress={() => {
+            this.props.navigation.navigate('DetailedTicker', {
+              item: item,
+            });
+          }}>
+        <TickerCard id={item.symbol} name={item.name} price={item.last} />
+        </TouchableOpacity>
+      </Swipeout>
+    );
   }
 
   render() {
@@ -178,7 +288,10 @@ export default class StockList extends Component {
         <SafeAreaView style={styles.loading}>
           <Text style={styles.infoText}>Attempting to get ticker data...</Text>
           <ActivityIndicator size="large" color="#0B3948" />
-          <PrimaryButton onPress={() => this.grabData()}>Refresh Now</PrimaryButton>
+          <Button
+            onPress={() => this.grabData()}
+            title="Refresh Now"
+          />
         </SafeAreaView>
       );
     }
@@ -193,7 +306,7 @@ export default class StockList extends Component {
           {/* Picker Modal */}
           <Modal visible={this.state.pickerDisplayed} animationType={"slide"} transparent={true}>
             <View style={styles.picker}>
-              <Text style={{ color: 'white', fontSize: 20, textDecorationLine: 'underline' }}>Please pick filtering option:</Text>
+              <Text style={{ color: 'white', fontSize: 20, }}>Please pick filtering option:</Text>
               {pickerValues.map((choice, index) => {
                 return (
                   <TouchableHighlight
@@ -210,10 +323,10 @@ export default class StockList extends Component {
               </TouchableHighlight>
             </View>
           </Modal>
+
           <FlatList
             data={this.filterData()}
-            renderItem={({ item }) =>
-              <TickerCard id={item.id} name={item.name} price={item.price} />}
+            renderItem={({ item }) => this.renderItem(item)}
             keyExtractor={this._keyExtractor}
             ListHeaderComponent={
               <View>
@@ -230,7 +343,7 @@ export default class StockList extends Component {
             }
             // Only show Empty Component to add new stock if search length is 0
             ListEmptyComponent={
-              (this.state.search.length == 0 && <TouchableOpacity onPress={() => Alert.alert('not implemented yet!')}>
+              (this.state.search.length == 0 && <TouchableOpacity onPress={() => this.onAddSymbolPress()}>
                 <Text style={styles.emptyAdd}>Add first stock!</Text>
               </TouchableOpacity>)
             }
@@ -271,7 +384,7 @@ const styles = StyleSheet.create({
   loading: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: 'white'
   },
@@ -329,5 +442,9 @@ const styles = StyleSheet.create({
   pickerText: {
     fontSize: 17,
     color: 'white',
-  }
+  },
+  actionIcon: {
+    width: 30,
+    marginHorizontal: 10,
+  },
 });

@@ -1,0 +1,7 @@
+C:/Users/Vincent/AppData/Local/Android/Sdk/ndk-bundle/build//../build/core
+D:/cs130/StockNotifier-Frontend/android/app/src/main/jni/cincludes/armv7/
+[armeabi-v7a] Compile thumb  : login_client <= com_stock_client_login_ClientBridge.c
+[armeabi-v7a] Compile thumb  : login_client <= client_login.c
+[armeabi-v7a] Prebuilt       : libgmp.so <= D:/cs130/StockNotifier-Frontend/android/app/src/main/jni/clibs/armv7/
+[armeabi-v7a] Prebuilt       : libsodium.so <= D:/cs130/StockNotifier-Frontend/android/app/src/main/jni/clibs/armv7/
+[armeabi-v7a] SharedLibrary  : liblogin_client.so
