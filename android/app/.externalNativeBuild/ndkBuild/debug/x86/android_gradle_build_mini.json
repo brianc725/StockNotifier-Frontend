@@ -1,17 +1,17 @@
 {
   "buildFiles": [
-    "/home/aldenperrine/Downloads/StockNotifier-Frontend/android/app/src/main/jni/Android.mk",
-    "/home/aldenperrine/Downloads/StockNotifier-Frontend/android/app/src/main/jni/Application.mk"
+    "D:\\cs130\\StockNotifier-Frontend\\android\\app\\src\\main\\jni\\Android.mk",
+    "D:\\cs130\\StockNotifier-Frontend\\android\\app\\src\\main\\jni\\Application.mk"
   ],
   "cleanCommands": [
-    "/home/aldenperrine/Android/Sdk/ndk-bundle/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/aldenperrine/Downloads/StockNotifier-Frontend/android/app/src/main/jni/Android.mk NDK_APPLICATION_MK\u003d/home/aldenperrine/Downloads/StockNotifier-Frontend/android/app/src/main/jni/Application.mk APP_ABI\u003dx86 NDK_ALL_ABIS\u003dx86 NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-17 NDK_OUT\u003d/home/aldenperrine/Downloads/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/home/aldenperrine/Downloads/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/lib clean"
+    "C:\\Users\\Vincent\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dD:\\cs130\\StockNotifier-Frontend\\android\\app\\src\\main\\jni\\Android.mk NDK_APPLICATION_MK\u003dD:\\cs130\\StockNotifier-Frontend\\android\\app\\src\\main\\jni\\Application.mk APP_ABI\u003dx86 NDK_ALL_ABIS\u003dx86 NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-17 NDK_OUT\u003dD:/cs130/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003dD:\\cs130\\StockNotifier-Frontend\\android\\app\\build\\intermediates\\ndkBuild\\debug\\lib clean"
   ],
   "libraries": {
     "login_client-debug-x86": {
       "artifactName": "login_client",
-      "buildCommand": "/home/aldenperrine/Android/Sdk/ndk-bundle/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/aldenperrine/Downloads/StockNotifier-Frontend/android/app/src/main/jni/Android.mk NDK_APPLICATION_MK\u003d/home/aldenperrine/Downloads/StockNotifier-Frontend/android/app/src/main/jni/Application.mk APP_ABI\u003dx86 NDK_ALL_ABIS\u003dx86 NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-17 NDK_OUT\u003d/home/aldenperrine/Downloads/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/home/aldenperrine/Downloads/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/lib /home/aldenperrine/Downloads/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/obj/local/x86/liblogin_client.so",
+      "buildCommand": "C:\\Users\\Vincent\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dD:\\cs130\\StockNotifier-Frontend\\android\\app\\src\\main\\jni\\Android.mk NDK_APPLICATION_MK\u003dD:\\cs130\\StockNotifier-Frontend\\android\\app\\src\\main\\jni\\Application.mk APP_ABI\u003dx86 NDK_ALL_ABIS\u003dx86 NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-17 NDK_OUT\u003dD:/cs130/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003dD:\\cs130\\StockNotifier-Frontend\\android\\app\\build\\intermediates\\ndkBuild\\debug\\lib D:/cs130/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/obj/local/x86/liblogin_client.so",
       "abi": "x86",
-      "output": "/home/aldenperrine/Downloads/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/obj/local/x86/liblogin_client.so"
+      "output": "D:\\cs130\\StockNotifier-Frontend\\android\\app\\build\\intermediates\\ndkBuild\\debug\\obj\\local\\x86\\liblogin_client.so"
     }
   }
 }

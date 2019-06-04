@@ -28,11 +28,6 @@ public class ClientLoginModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public String callTest() {
-	return "Success";
-    }
-
-    @ReactMethod
     public void promiseTest(Promise p) {
 	p.resolve("Success");
     }

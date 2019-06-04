@@ -63,7 +63,23 @@ include $(PREBUILT_SHARED_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_PATH := $(call my-dir)
 
-LOCAL_C_INCLUDES := /usr/local/include
+$(info $(LOCAL_PATH))
+
+ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
+	LOCAL_C_INCLUDES := $(PROJECT_ROOT)/android/app/src/main/jni/cincludes/armv8/
+else
+	ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+		LOCAL_C_INCLUDES := $(PROJECT_ROOT)/android/app/src/main/jni/cincludes/armv7/
+	else
+		ifeq ($(TARGET_ARCH_ABI),x86)
+			LOCAL_C_INCLUDES := $(PROJECT_ROOT)/android/app/src/main/jni/cincludes/x86/
+		else
+			LOCAL_C_INCLUDES := $(PROJECT_ROOT)/android/app/src/main/jni/cincludes/x86_64/
+		endif
+	endif
+endif
+
+$(info $(LOCAL_C_INCLUDES))
 
 LOCAL_STATIC_LIBRARIES := gmp sodium
 
