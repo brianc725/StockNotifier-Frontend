@@ -116,7 +116,7 @@ JNIEXPORT jobject JNICALL Java_com_stocknotifier_ClientLoginModule_jni_1generate
   jbyteArray hv_array = (*env)->NewByteArray(env, key_size);
   (*env)->SetByteArrayRegion(env, hv_array, 0, key_size, (jbyte*) hv);
 
-  jclass r_ret_class = (*env)->FindClass(env, "com/stock_client_login/VerificationValues");
+  jclass r_ret_class = (*env)->FindClass(env, "com/stocknotifier/VerificationValues");
   jmethodID construct = (*env)->GetMethodID(env, r_ret_class, "<init>", "([B[B[B[B)V");
   jobject retval = (*env)->NewObject(env, r_ret_class, construct, sk_array, m1_array, m2_array, hv_array);
 

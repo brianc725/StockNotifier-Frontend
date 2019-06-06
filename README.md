@@ -49,6 +49,11 @@ the `react-native run-android` command. To do so, CD into `./app/Scripts/`.
     - For Windows run `android-emulator.bat`
     - For MacOS: `./emulator-android-mac.sh`
 
+## Debugging
+
+- For Fatal Android crushes, review `adb logcat`.
+- For haste cache module crashes, delete `package-lock.json` and `npm install` fresh.
+
 ## Introduction
 
 The Stock Notification App has the purpose of allowing users to follow tickers 
