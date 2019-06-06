@@ -3,7 +3,7 @@ import {
   View, TextInput, Animated, Text
 } from 'react-native';
 import styles from '../styles';
-import { saveSignIn } from '../auth';
+import { login } from '../auth'
 import PrimaryButton from './PrimaryButton';
 
 export default class LoginForm extends Component {
@@ -14,25 +14,26 @@ export default class LoginForm extends Component {
       fields: {
         username: "",
         password: "",
-        passwordAgain: "",
       },
       focused: {
         username: false,
         password: false,
-        passwordAgain: false
       },
       slidingAnims: {
         username: new Animated.Value(0),
         password: new Animated.Value(0),
-        passwordAgain: new Animated.Value(0),
       }
     };
     this.onSignIn = this.onSignIn.bind(this);
   }
 
-  onSignIn = () => {
-    saveSignIn();
-    this.props.navigation.navigate('App');
+  onSignIn = async () => {
+    authenticated = await login(this.state.fields.username, this.state.fields.password);
+    if (authenticated) {
+      this.props.navigation.navigate('App');
+    } else {
+      alert("Incorrect username or password.");
+    }
   }
 
   validate(username, password) {
@@ -72,8 +73,6 @@ export default class LoginForm extends Component {
   }
 
   labelStyle(field) {
-
-
     return {
       position: 'absolute',
       left: 0,
@@ -118,7 +117,8 @@ export default class LoginForm extends Component {
             onFocus={this.handleFocus('username')}
             autoCorrect={false} 
             keyboardType='email-address' 
-            returnKeyType="next" 
+            returnKeyType="next"
+            maxLength={79}
           />
           <Text style={styles.errmsg}>{this.errmsg('username', 0)}</Text>
         </View>

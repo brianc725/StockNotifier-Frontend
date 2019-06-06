@@ -7,11 +7,13 @@ import TickerCard from '../Components/TickerCard';
 import { contains } from '../Scripts/Search';
 import { SafeAreaView } from 'react-navigation';
 import { Header, SearchBar, Button } from 'react-native-elements'
+import AsyncStorage from '@react-native-community/async-storage';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Swipeout from 'react-native-swipeout';
 import _ from 'lodash';
 
-const API_URL = Platform.OS == 'ios' ? "http://localhost:5000/tickers" : "http://10.0.2.2:5000/tickers"
+const API_URL = 'http://cs130-stock-notifier-http-server.us-west-1.elasticbeanstalk.com/user_tickers';
+const DELETE_URL = 'http://cs130-stock-notifier-http-server.us-west-1.elasticbeanstalk.com/delete_ticker';
 
 // The filter picker options 
 const pickerValues = [
@@ -54,6 +56,10 @@ export default class StockList extends Component {
   };
 
   async componentDidMount() {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+      this.grabData();
+    });
+
     this.grabData()
   }
 
@@ -62,26 +68,38 @@ export default class StockList extends Component {
   async grabData() {
     let temp;
 
+    const username = await AsyncStorage.getItem('username');
+    const sessionId  = await AsyncStorage.getItem('session_id');
+
+    const body = {
+      username: username,
+      session_id: sessionId,
+    }
+
     // Fetch the data from the API 
-    await fetch(API_URL)
+    await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    })
       .then((response) => { return response.json(); })
       .then((data) => {
         temp = data;
-
         // Get last synced time 
         const time = new Date().toLocaleString();
 
-        // Currently data is returned in 'tickers'
         this.setState({
-          ticker_data: temp.tickers,
-          full_ticker_data: temp.tickers,
+          ticker_data: temp,
+          full_ticker_data: temp,
           lastUpdated: time,
         });
       })
       .catch((error) => { console.log(error); });
   }
 
-  _keyExtractor = (item) => item.id;
+  _keyExtractor = (item) => item.symbol;
 
   // Save the current query string from the user 
   handleSearch = search => {
@@ -127,18 +145,18 @@ export default class StockList extends Component {
       // Apple, Boeing, Delta, Snap
       case 'azID':
         return ticker_data.sort((a, b) => {
-          return a.id.toLowerCase() >= b.id.toLowerCase();
+          return a.symbol.toLowerCase() >= b.symbol.toLowerCase();
         });
       // Snap, Delta, Boeing, Apple
       case 'zaID':
         return ticker_data.sort((a, b) => {
-          return a.id.toLowerCase() <= b.id.toLowerCase();
+          return a.symbol.toLowerCase() <= b.symbol.toLowerCase();
         });
       // 10, 40, 200, 3000
       case 'incrPrice':
         return ticker_data.sort((a, b) => {
-          var aPrice = parseFloat(a.price);
-          var bPrice = parseFloat(b.price)
+          var aPrice = parseFloat(a.last);
+          var bPrice = parseFloat(b.last)
 
           // If any of the prices are NaN, just treat as Infinity 
           if (isNaN(aPrice)) {
@@ -153,8 +171,8 @@ export default class StockList extends Component {
       // 3000, 200, 40, 10
       case 'decrPrice':
         return ticker_data.sort((a, b) => {
-          var aPrice = parseFloat(a.price);
-          var bPrice = parseFloat(b.price)
+          var aPrice = parseFloat(a.last);
+          var bPrice = parseFloat(b.last)
 
           // If any of the prices are NaN, just treat as Infinity 
           if (isNaN(aPrice)) {
@@ -173,16 +191,40 @@ export default class StockList extends Component {
   }
 
   // Handle the deletion of the ticker 
-  handleDelete(item) {
-    Alert.alert('Deleted not implemented!');
-    // Call the API with the API to be deleted 
+  async handleDelete(item) {
+    const username = await AsyncStorage.getItem('username');
+    const sessionId  = await AsyncStorage.getItem('session_id');
 
-    // Alert.alert('Deleted ' + item.id);
+    const body = {
+      username: username,
+      session_id: sessionId,
+      tickers: [item],
+    };
+
+    // Fetch the data from the API 
+    await fetch(DELETE_URL, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((response) => { return response.json(); })
+      .then((data) => {
+        Alert.alert(item + ' was deleted!');
+      })
+      .catch((error) => {
+        console.log(error);
+        Alert.alert(item + ' failed to be deleted at this time');
+      });
+
+    // Refresh
+    this.grabData();
   }
 
   // Confirm deletion of the stock ticker
   confirmDelete(item) {
-    const tickerID = item.id
+    const tickerID = item.symbol
 
     Alert.alert(
       'Are you sure you want to delete?',
@@ -193,7 +235,7 @@ export default class StockList extends Component {
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        { text: 'OK', onPress: () => this.handleDelete(item) }
+        { text: 'OK', onPress: () => this.handleDelete(tickerID) }
       ],
       { cancelable: false },
     );
@@ -219,7 +261,7 @@ export default class StockList extends Component {
               item: item,
             });
           }}>
-        <TickerCard id={item.id} name={item.name} price={item.price} />
+        <TickerCard id={item.symbol} name={item.name} price={item.last} />
         </TouchableOpacity>
       </Swipeout>
     );

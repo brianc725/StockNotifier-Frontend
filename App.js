@@ -7,28 +7,13 @@
  */
 
 import React, { Component } from 'react';
-// import { Platform, StyleSheet, Text, View } from 'react-native';
-// import Login from './app/Screens/Login';
-// import StockList from './app/Screens/StockList';
-// import Register from './app/Screens/Register';
-
-import { Platform, StyleSheet, Text, View, Alert } from 'react-native';
-import Login from './app/Screens/Login';
-import StockList from './app/Screens/StockList';
-import Register from './app/Screens/Register';
+import { Platform, StyleSheet, Alert } from 'react-native';
 import Navigator from './app/Navigator';
 import AsyncStorage from '@react-native-community/async-storage';
 import firebase from 'react-native-firebase';
 import Sound from 'react-native-sound';
 
 
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -45,46 +30,45 @@ async componentDidMount() {
 }
 
   //1
-async checkPermission() {
-  const enabled = await firebase.messaging().hasPermission();
-  if (enabled) {
+  async checkPermission() {
+    const enabled = await firebase.messaging().hasPermission();
+    if (enabled) {
       this.getToken();
-  } else {
+    } else {
       this.requestPermission();
+    }
   }
-}
 
   //3
-async getToken() {
-  let fcmToken = await AsyncStorage.getItem('fcmToken');
-  if (!fcmToken) {
+  async getToken() {
+    let fcmToken = await AsyncStorage.getItem('fcmToken');
+    if (!fcmToken) {
       fcmToken = await firebase.messaging().getToken();
       if (fcmToken) {
-          // user has a device token
-          await AsyncStorage.setItem('fcmToken', fcmToken);
+        // user has a device token
+        await AsyncStorage.setItem('fcmToken', fcmToken);
       }
-  }
-    console.log('Token:' + fcmToken);
+    }
+  }s
 
-}
 
   //2
-async requestPermission() {
-  try {
+  async requestPermission() {
+    try {
       await firebase.messaging().requestPermission();
-        console.log('Check Permission')
+      console.log('Check Permission')
       // User has authorised
       this.getToken();
-  } catch (error) {
+    } catch (error) {
       // User has rejected permissions
       console.log('permission rejected');
+    }
   }
-}
 
-componentWillUnmount() {
-  this.notificationListener();
-  this.notificationOpenedListener();
-}
+  componentWillUnmount() {
+    this.notificationListener();
+    this.notificationOpenedListener();
+  }s
 
 async createNotificationListeners() {
   /*
@@ -140,33 +124,10 @@ sendNotification(notification){
       firebase.notifications().displayNotification(notification);
 }
 
+
   render() {
     return (
-      // <Login></Login>
-      // <Register></Register>
-      // <StockList></StockList>
-      // <SignedOut></SignedOut>
-      // <SignedIn/>
-      <Navigator/>
+      <Navigator />
     );
   }
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     backgroundColor: '#F5FCFF',
-//   },
-//   welcome: {
-//     fontSize: 20,
-//     textAlign: 'center',
-//     margin: 10,
-//   },
-//   instructions: {
-//     textAlign: 'center',
-//     color: '#333333',
-//     marginBottom: 5,
-//   },
-// });

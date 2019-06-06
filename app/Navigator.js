@@ -79,6 +79,6 @@ export default Navigator = createAppContainer(createSwitchNavigator(
     AuthLoading: AuthLoading
   },
   {
-    initialRouteName: 'Auth'
+    initialRouteName: 'AuthLoading'
   }
 ));

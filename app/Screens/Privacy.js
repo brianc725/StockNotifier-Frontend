@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {
-  Text, View, StyleSheet, Dimensions, WebView,
+  Text, View, StyleSheet, Dimensions,
 } from 'react-native';
+import { WebView } from 'react-native-webview';
 import { Header } from 'react-native-elements'
 
 export default class Privacy extends Component {

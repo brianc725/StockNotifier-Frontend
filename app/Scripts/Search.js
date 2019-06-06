@@ -1,7 +1,7 @@
 // Utility function for search bar to determine if search query is part of
-// the ticker symbol id or the full name of the company 
-export const contains = ({id, name}, search) => {
-    const idLower = id.toLowerCase();
+// the ticker symbol or the full name of the company 
+export const contains = ({symbol, name}, search) => {
+    const idLower = symbol.toLowerCase();
     const nameLower = name.toLowerCase();
     if (idLower.startsWith(search) || nameLower.startsWith(search)) {
         return true;

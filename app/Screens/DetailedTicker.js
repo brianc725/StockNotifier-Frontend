@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import {
-  Text, View, StyleSheet, Dimensions
+  Text, View, StyleSheet, Dimensions, ScrollView,
 } from 'react-native';
 import { Header } from 'react-native-elements';
+import AsyncStorage from '@react-native-community/async-storage';
 import StockChart from '../Components/StockChart';
+import SupportResistData from '../Components/SupportResistData';
 
 // Don't want this page to show up in the Drawer Navigator 
 class Hidden extends React.Component {
@@ -40,7 +42,7 @@ export default class Detailed extends Component {
             color: '#fff',
             onPress: () => this.props.navigation.goBack(),
           }}
-          centerComponent={{ text: item.id, style: { color: '#fff' } }}
+          centerComponent={{ text: item.symbol, style: { color: '#fff' } }}
           containerStyle={{
             backgroundColor: '#5E8D93',
           }}
@@ -49,35 +51,46 @@ export default class Detailed extends Component {
         {/* Standard information */}
         <View style={styles.card}>
           <View>
-            <Text style={styles.idText}>{item.id}</Text>
+            <Text style={styles.idText}>{item.symbol}</Text>
             <Text style={styles.nameText}>{item.name}</Text>
           </View>
           <View>
-            <Text style={styles.priceText}>${item.price}</Text>
+            <Text style={styles.priceText}>${item.last}</Text>
           </View>
         </View>
 
         {horizontalRule}
-        <StockChart support={item.support}
-          resistance={item.resistance}
-          current={item.price}
+        <StockChart support={item.supports[0]}
+          resistance={item.resistances[0]}
+          current={item.last}
         />
         {horizontalRule}
 
         {/* Support Resistance Information */}
-        <View style={styles.card}>
-          <View style={styles.infoContainer}>
-            <Text style={styles.idText}>Support</Text>
-            <Text style={styles.infoText}>${item.support}</Text>
-            <Text style={styles.infoText}>Strength: {item.support_strength}</Text>
+        <ScrollView style={{ flex: 1, }}>
+          <View style={styles.card}>
+            <View style={styles.infoContainer}>
+              <Text style={styles.idText}>Support(s)</Text>
+              {
+                item.supports.map((item) =>
+                  <View style={styles.infoSpacing} key={item.price}>
+                    <SupportResistData item={item} />
+                  </View>
+                )
+              }
+            </View>
+            <View style={styles.infoContainer}>
+              <Text style={styles.idText}>Resistance(s)</Text>
+              {
+                item.resistances.map((item) =>
+                  <View style={styles.infoSpacing} key={item.price}>
+                    <SupportResistData item={item} />
+                  </View>
+                )
+              }
+            </View>
           </View>
-          <View style={styles.infoContainer}>
-            <Text style={styles.idText}>Resistance</Text>
-            <Text style={styles.infoText}>${item.resistance}</Text>
-            <Text style={styles.infoText}>Strength: {item.resistance_strength}</Text>
-          </View>
-        </View>
-
+        </ScrollView>
 
       </View>
     );
@@ -106,7 +119,7 @@ const text = {
 
 const styles = StyleSheet.create({
   card: {
-    flex: 2,
+    flex: 1,
     paddingTop: 15,
     paddingBottom: 15,
     justifyContent: 'space-around',
@@ -134,5 +147,9 @@ const styles = StyleSheet.create({
   infoText: {
     ...text,
     fontSize: 16,
-  }
+  },
+  infoSpacing: {
+    marginTop: 10,
+    marginBottom: 10,
+  },
 });
