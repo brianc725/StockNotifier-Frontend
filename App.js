@@ -49,7 +49,7 @@ async componentDidMount() {
         await AsyncStorage.setItem('fcmToken', fcmToken);
       }
     }
-  }s
+  }
 
 
   //2
