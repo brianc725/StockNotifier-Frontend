@@ -1,29 +1,8 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import ClientLogin from './ClientLogin';
-
-export const USER_KEY = "auth-demo-key";
-
-export const saveSignIn = () => AsyncStorage.setItem(USER_KEY, "true");
-
-export const clearSignIn = () => AsyncStorage.removeItem(USER_KEY);
-
-export const isSignedIn = () => {
-  return new Promise((resolve, reject) => {
-    AsyncStorage.getItem(USER_KEY)
-      .then(res => {
-        if (res !== null) {
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      })
-      .catch(err => reject(err));
-  });
-};
-
+import { isTerminatorless } from '@babel/types';
 
 const domain = 'http://cs130-stock-notifier-http-server.us-west-1.elasticbeanstalk.com/';
-// const domain = 'http://10.0.2.2:5000';
 
 const routes = {
   register: domain + '/register',
@@ -31,6 +10,7 @@ const routes = {
     get_salt: domain + '/login/get_salt',
     get_b: domain + '/login/get_b',
     get_m2: domain + '/login/get_m2',
+    terminate: domain + '/login/terminate',
   }
 };
 
@@ -58,15 +38,14 @@ function generateMessage(data = {}) {
   }
 }
 
-export async function register(username, password) {
-  rvals = await ClientLogin.generateRegistration(username + password);
+export const clearSignIn = async () => {
+  username = await AsyncStorage.getItem("username");
+  session_id = await AsyncStorage.getItem("session_id");
   data = {
     'username': username,
-    'user_salt': rvals.s,
-    'user_verifier': rvals.v
-  }
-  console.log(JSON.stringify(data));
-  await fetchWithTimeout(routes.register, generateMessage(data))
+    'session_id': session_id,
+  };
+  return await fetchWithTimeout(routes.login.terminate, generateMessage(data))
   .then(function(response) {
     if (response.ok || response.status == 400 || response.status == 500) {
       return response.json();
@@ -77,7 +56,36 @@ export async function register(username, password) {
       alert(resBody.error);
       return false;
     } else {
-      alert("registered");
+      AsyncStorage.removeItem("username");
+      AsyncStorage.removeItem("session_id");
+      return true;
+    }
+  }).catch(function(error) {
+    alert(error);
+    return false;
+  })
+}
+
+
+export async function register(username, password) {
+  rvals = await ClientLogin.generateRegistration(username + password);
+  data = {
+    'username': username,
+    'user_salt': rvals.s,
+    'user_verifier': rvals.v
+  }
+  console.log(JSON.stringify(data));
+  return await fetchWithTimeout(routes.register, generateMessage(data))
+  .then(function(response) {
+    if (response.ok || response.status == 400 || response.status == 500) {
+      return response.json();
+    }
+    throw new Error("ERROR");
+  }).then(function(resBody) {
+    if (typeof resBody.error !== "undefined") {
+      alert(resBody.error);
+      return false;
+    } else {
       return true;
     }
   }).catch(function(error) {
@@ -88,7 +96,6 @@ export async function register(username, password) {
 
 
 export async function login(username, password) {
-  
   got_salt = await fetchWithTimeout(routes.login.get_salt, generateMessage({
     'username': username,
   })).then(function(response) {
@@ -101,8 +108,6 @@ export async function login(username, password) {
       alert(resBody.error);
       return null;
     } else {
-      alert("got salt");
-      AsyncStorage.setItem("username", username);
       return resBody;
     }
   }).catch(function(error) {
@@ -110,7 +115,9 @@ export async function login(username, password) {
     return null;
   })
 
-  if (!got_salt) {
+  console.log(got_salt);
+
+  if (got_salt == null) {
     return false;
   }
 
@@ -129,7 +136,6 @@ export async function login(username, password) {
       alert(resBody.error);
       return null;
     } else {
-      alert("got B");
       return resBody;
     }
   }).catch(function(error) {
@@ -137,7 +143,7 @@ export async function login(username, password) {
     return null;
   })
 
-  if (!got_b) {
+  if (got_b === null) {
     return false;
   }
 
@@ -178,7 +184,6 @@ export async function login(username, password) {
       alert(resBody.error);
       return null;
     } else {
-      alert("got m2");
       return resBody;
     }
   }).catch(function(error) {
@@ -186,9 +191,16 @@ export async function login(username, password) {
     return null;
   })
   
-  if (!got_m2) {
+  if (got_m2 === null) {
     return false;
   }
+
+  if (got_m2.m2 != vvals.m2) {
+    return false;
+  }
+  
+  AsyncStorage.setItem("username", username);
+  AsyncStorage.setItem("session_id", vvals.hv);
 
   return true;
 }
