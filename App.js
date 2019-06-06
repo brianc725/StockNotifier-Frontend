@@ -19,6 +19,9 @@ import Register from './app/Screens/Register';
 import Navigator from './app/Navigator';
 import AsyncStorage from '@react-native-community/async-storage';
 import firebase from 'react-native-firebase';
+import Sound from 'react-native-sound';
+
+
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -30,8 +33,15 @@ const instructions = Platform.select({
 type Props = {};
 export default class App extends Component<Props> {
 async componentDidMount() {
+	const channel = new firebase.notifications.Android.Channel(
+	"notification",
+	"Notification",
+	firebase.notifications.Android.Importance.High,
+	)//.setSound("default");
+    firebase.notifications().android.createChannel(channel);
   this.checkPermission();
-  this.createNotificationListeners(); //add this line
+  this.createNotificationListeners(); 
+  
 }
 
   //1
@@ -54,6 +64,8 @@ async getToken() {
           await AsyncStorage.setItem('fcmToken', fcmToken);
       }
   }
+    console.log('Token:' + fcmToken);
+
 }
 
   //2
@@ -79,27 +91,24 @@ async createNotificationListeners() {
   * Triggered when a particular notification has been received in foreground
   * */
   this.notificationListener = firebase.notifications().onNotification((notification) => {
-      console.log('I was triggered')
-      const { title, body } = notification;
-      this.showAlert(title, body);
+      const {title, body} = notification;
+      this.sendNotification(notification.setSound("default"));
   });
 
   /*
   * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
   * */
   this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
-      const { title, body } = notificationOpen.notification;
-      this.showAlert(title, body);
-  });
+  	  this.sendNotification(notificationOpen.notification.setSound("default"));
+  	    });
 
   /*
   * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
   * */
   const notificationOpen = await firebase.notifications().getInitialNotification();
-  if (notificationOpen) {
-      const { title, body } = notificationOpen.notification;
-      this.showAlert(title, body);
-  }
+  // if (notificationOpen) {
+  // 	 this.sendNotification(notificationOpen.notification.setSound("default"));
+  // }
   /*
   * Triggered for data only payload in foreground
   * */
@@ -109,16 +118,27 @@ async createNotificationListeners() {
   });
 }
 
-showAlert(title, body) {
-  Alert.alert(
-    title, body,
-    [
-        { text: 'OK', onPress: () => console.log('OK Pressed') },
-    ],
-    { cancelable: false },
-  );
+sendNotification(notification){
+	var sound = new Sound('cha_ching_sound', Sound.MAIN_BUNDLE, (error) => {
+            if (error) {
+                console.log('failed to load the sound', error);
+            } else {
+                sound.play(); // have to put the call to play() in the onload callback
+            }
+        });
+	const channelGroup = new firebase.notifications.Android.ChannelGroup('notification-group', 'Notification Group');
+	firebase.notifications().android.createChannelGroup(channelGroup);
+      notification = notification//.setSound("default")
+      .android.setPriority(firebase.notifications.Android.Priority.Max)
+      .android.setChannelId('notification')
+      .android.setGroup('notification-group')
+      .android.setGroupSummary(true)
+      .android.setGroupAlertBehaviour(firebase.notifications.Android.GroupAlert.All)
+      .android.setCategory(firebase.notifications.Android.Category.Alarm)
+      .android.setPriority(firebase.notifications.Android.Priority.High)
+      .android.setAutoCancel(true);
+      firebase.notifications().displayNotification(notification);
 }
-
 
   render() {
     return (
