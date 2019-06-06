@@ -122,27 +122,25 @@ def all_nyse():
 
 # Developing authentication
 
-user_salt = 69
-
 @app.route('/register', methods=['POST'])
 def register():
     print(request.get_json())
-    return jsonify({'user_salt': user_salt})
+    return jsonify({'user_salt': '69'})
 
 @app.route('/login/get_salt', methods=['POST'])
 def get_salt():
     print(request.get_json())
-    return jsonify({'user_salt': user_salt, 'nonce': 1234})
+    return jsonify({'user_salt': '69', 'nonce': '1234'})
 
 @app.route('/login/get_b', methods=['POST'])
 def get_b():
     print(request.get_json())
-    return jsonify({'big_b': 60})
+    return jsonify({'big_b': '60'})
 
 @app.route('/login/get_m2', methods=['POST'])
 def get_m2():
     print(request.get_json())
-    return jsonify({'m2': 70})
+    return jsonify({'m2': '70'})
 
 
 

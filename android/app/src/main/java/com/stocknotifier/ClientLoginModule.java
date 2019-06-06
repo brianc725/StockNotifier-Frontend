@@ -52,8 +52,10 @@ public class ClientLoginModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void generateRegistration(String userpass, Promise p) {
 	if (isInit) {
-	    RegistrationValues rvals = jni_generate_registration(userpass);
-	    p.resolve("Success");
+	    RegistrationValues rvals = jni_generate_registration(userpass);WritableMap retval = new WritableNativeMap();
+	    retval.putString("v", bytesToHex(rvals.v));
+	    retval.putString("s", bytesToHex(rvals.s));
+	    p.resolve(retval);
 	} else {
 	    p.reject("ERR", "Library not initialized");
 	}
@@ -72,7 +74,7 @@ public class ClientLoginModule extends ReactContextBaseJavaModule {
 	    AHex.length() != 2*jni_lib_bytes_size() ||
 	    BHex.length() != 2*jni_lib_bytes_size() ||
 	    sHex.length() != 2*jni_lib_bytes_size() ||
-	    AHex.length() != 2*jni_lib_key_size() ||
+	    nHex.length() != 2*jni_lib_key_size() ||
 	    username.length() > 79) {
 	    p.reject("ERR", "Invalid data passed in");
 	}
@@ -81,8 +83,8 @@ public class ClientLoginModule extends ReactContextBaseJavaModule {
 						   hexToBytes(AHex), hexToBytes(BHex),
 						   hexToBytes(sHex), hexToBytes(nHex));
 	WritableMap retval = new WritableNativeMap();
-	retval.putString("ck", bytesToHex(vvals.ck));
-	retval.putString("hv", bytesToHex(vvals.hv));
+	retval.putString("ck", bytesToHex(vvals.ck));	// symmetric key for crypto
+	retval.putString("hv", bytesToHex(vvals.hv));	// session id
 	retval.putString("m1", bytesToHex(vvals.m1));
 	retval.putString("m2", bytesToHex(vvals.m2));
 	p.resolve(retval);
@@ -125,7 +127,7 @@ public class ClientLoginModule extends ReactContextBaseJavaModule {
         }
         return bytes;
     }
-}
+} 
 
 class RegistrationValues {
     public RegistrationValues(byte[] si, byte[] vi) {

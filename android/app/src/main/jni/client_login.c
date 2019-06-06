@@ -178,7 +178,7 @@ int generate_ck(const char* username_in,
   mpz_powm(cs, cb, ce, N);
 
   if (mpz_size(cs)*sizeof(mp_limb_t) > BYTES_SIZE) {
-    return 1;
+    //return 1;
   }
 
   unsigned char cs_bytes[BYTES_SIZE];

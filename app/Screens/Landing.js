@@ -4,12 +4,16 @@ import {
 } from 'react-native';
 import styles from '../styles';
 import PrimaryButton from '../Components/PrimaryButton';
-import ClientLogin from '../ClientLogin'
+import { register, login } from '../auth'
 
 export default class Landing extends Component {
 
-  async promiseTest() {
-    console.debug(await ClientLogin.generateAs())
+  async f() {
+    console.log(await register('f', 'u'));
+  }
+
+  async g() {
+    console.log(await login('f', 'u'));
   }
 
   render() {
@@ -17,10 +21,16 @@ export default class Landing extends Component {
       <View style={styles.container}>
         <View style={styles.landingInputContainer}>
           <PrimaryButton
-            onPress={() => this.props.navigation.navigate('Register')}>Sign Up
+            onPress={() => this.props.navigation.navigate('Register')}>
+              Sign Up
           </PrimaryButton>
           <PrimaryButton
-            onPress={() => this.promiseTest()}>Test
+            onPress={() => this.f("f", "u")}>
+              Test Register
+          </PrimaryButton>
+          <PrimaryButton
+            onPress={() => this.g("f", "u")}>
+              Test Login
           </PrimaryButton>
         </View>
       </View>
