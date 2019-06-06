@@ -1,3 +1,7 @@
-C:/Users/Vincent/AppData/Local/Android/Sdk/ndk-bundle/build//../build/core
-D:/cs130/StockNotifier-Frontend/android/app/src/main/jni/cincludes/armv7/
-make: `D:/cs130/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/obj/local/armeabi-v7a/liblogin_client.so' is up to date.
+/Users/brianchan/Library/Android/sdk/ndk-bundle/build/core
+/Users/brianchan/Desktop/StockNotifier-Frontend/android/app/src/main/jni/cincludes/armv7/
+[armeabi-v7a] Compile thumb  : login_client <= com_stock_client_login_ClientBridge.c
+[armeabi-v7a] Compile thumb  : login_client <= client_login.c
+[armeabi-v7a] Prebuilt       : libgmp.so <= /Users/brianchan/Desktop/StockNotifier-Frontend/android/app/src/main/jni/clibs/armv7/
+[armeabi-v7a] Prebuilt       : libsodium.so <= /Users/brianchan/Desktop/StockNotifier-Frontend/android/app/src/main/jni/clibs/armv7/
+[armeabi-v7a] SharedLibrary  : liblogin_client.so

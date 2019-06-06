@@ -17,6 +17,7 @@ $ npm install
 $ react-native link react-native-vector-icons
 $ react-native link @react-native-community/async-storage
 $ react-native link react-native-svg
+$ react-native link react-native-webview
 $ react-native link
 ```
 

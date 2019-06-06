@@ -1,5 +1,11 @@
 # NEWS
 
+## June 5, 2019
+- Completed integration of frontend with the backend
+
+## June 4, 2019
+- Tested proceudre for registration and login 
+
 ## June 3, 2019
 - Reset button logic adjusted in manage tickers, quick press for resetting number of displayed tickers, long press for full refresh of tickers from database.
 

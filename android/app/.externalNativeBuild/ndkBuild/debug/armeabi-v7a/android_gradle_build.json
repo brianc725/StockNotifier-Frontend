@@ -1,33 +1,33 @@
 {
   "buildFiles": [
-    "D:\\cs130\\StockNotifier-Frontend\\android\\app\\src\\main\\jni\\Android.mk",
-    "D:\\cs130\\StockNotifier-Frontend\\android\\app\\src\\main\\jni\\Application.mk"
+    "/Users/brianchan/Desktop/StockNotifier-Frontend/android/app/src/main/jni/Android.mk",
+    "/Users/brianchan/Desktop/StockNotifier-Frontend/android/app/src/main/jni/Application.mk"
   ],
   "cleanCommands": [
-    "C:\\Users\\Vincent\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dD:\\cs130\\StockNotifier-Frontend\\android\\app\\src\\main\\jni\\Android.mk NDK_APPLICATION_MK\u003dD:\\cs130\\StockNotifier-Frontend\\android\\app\\src\\main\\jni\\Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-17 NDK_OUT\u003dD:/cs130/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003dD:\\cs130\\StockNotifier-Frontend\\android\\app\\build\\intermediates\\ndkBuild\\debug\\lib clean"
+    "/Users/brianchan/Library/Android/sdk/ndk-bundle/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/Users/brianchan/Desktop/StockNotifier-Frontend/android/app/src/main/jni/Android.mk NDK_APPLICATION_MK\u003d/Users/brianchan/Desktop/StockNotifier-Frontend/android/app/src/main/jni/Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-17 NDK_OUT\u003d/Users/brianchan/Desktop/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/Users/brianchan/Desktop/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/lib clean"
   ],
   "libraries": {
     "login_client-debug-armeabi-v7a": {
-      "buildCommand": "C:\\Users\\Vincent\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dD:\\cs130\\StockNotifier-Frontend\\android\\app\\src\\main\\jni\\Android.mk NDK_APPLICATION_MK\u003dD:\\cs130\\StockNotifier-Frontend\\android\\app\\src\\main\\jni\\Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-17 NDK_OUT\u003dD:/cs130/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003dD:\\cs130\\StockNotifier-Frontend\\android\\app\\build\\intermediates\\ndkBuild\\debug\\lib D:/cs130/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/obj/local/armeabi-v7a/liblogin_client.so",
+      "buildCommand": "/Users/brianchan/Library/Android/sdk/ndk-bundle/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/Users/brianchan/Desktop/StockNotifier-Frontend/android/app/src/main/jni/Android.mk NDK_APPLICATION_MK\u003d/Users/brianchan/Desktop/StockNotifier-Frontend/android/app/src/main/jni/Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-17 NDK_OUT\u003d/Users/brianchan/Desktop/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/Users/brianchan/Desktop/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/lib /Users/brianchan/Desktop/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/obj/local/armeabi-v7a/liblogin_client.so",
       "toolchain": "toolchain-armeabi-v7a",
       "abi": "armeabi-v7a",
       "artifactName": "login_client",
       "files": [
         {
-          "src": "D:\\cs130\\StockNotifier-Frontend\\android\\app\\src\\main\\jni\\client_login.c",
-          "flags": "-target armv7-none-linux-androideabi17 -fdata-sections -ffunction-sections -fstack-protector-strong -funwind-tables -no-canonical-prefixes --sysroot C:/Users/Vincent/AppData/Local/Android/Sdk/ndk-bundle/build//../toolchains/llvm/prebuilt/windows-x86_64/sysroot -g -Wno-invalid-command-line-argument -Wno-unused-command-line-argument -fno-addrsig -fpic -mfpu\u003dvfpv3-d16 -march\u003darmv7-a -mthumb -O0 -UNDEBUG -fno-limit-debug-info -ID:/cs130/StockNotifier-Frontend/android/app/src/main/jni/cincludes/armv7/ -IC:/Users/Vincent/AppData/Local/Android/Sdk/ndk-bundle/build//../build/core -DANDROID -Wa,--noexecstack -Wformat -Werror\u003dformat-security"
+          "src": "/Users/brianchan/Desktop/StockNotifier-Frontend/android/app/src/main/jni/client_login.c",
+          "flags": "-target armv7-none-linux-androideabi17 -fdata-sections -ffunction-sections -fstack-protector-strong -funwind-tables -no-canonical-prefixes --sysroot /Users/brianchan/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -g -Wno-invalid-command-line-argument -Wno-unused-command-line-argument -fno-addrsig -fpic -mfpu\u003dvfpv3-d16 -march\u003darmv7-a -mthumb -O0 -UNDEBUG -fno-limit-debug-info -I/Users/brianchan/Desktop/StockNotifier-Frontend/android/app/src/main/jni/cincludes/armv7/ -I/Users/brianchan/Library/Android/sdk/ndk-bundle/build/core -DANDROID -Wa,--noexecstack -Wformat -Werror\u003dformat-security"
         },
         {
-          "src": "D:\\cs130\\StockNotifier-Frontend\\android\\app\\src\\main\\jni\\com_stock_client_login_ClientBridge.c",
-          "flags": "-target armv7-none-linux-androideabi17 -fdata-sections -ffunction-sections -fstack-protector-strong -funwind-tables -no-canonical-prefixes --sysroot C:/Users/Vincent/AppData/Local/Android/Sdk/ndk-bundle/build//../toolchains/llvm/prebuilt/windows-x86_64/sysroot -g -Wno-invalid-command-line-argument -Wno-unused-command-line-argument -fno-addrsig -fpic -mfpu\u003dvfpv3-d16 -march\u003darmv7-a -mthumb -O0 -UNDEBUG -fno-limit-debug-info -ID:/cs130/StockNotifier-Frontend/android/app/src/main/jni/cincludes/armv7/ -IC:/Users/Vincent/AppData/Local/Android/Sdk/ndk-bundle/build//../build/core -DANDROID -Wa,--noexecstack -Wformat -Werror\u003dformat-security"
+          "src": "/Users/brianchan/Desktop/StockNotifier-Frontend/android/app/src/main/jni/com_stock_client_login_ClientBridge.c",
+          "flags": "-target armv7-none-linux-androideabi17 -fdata-sections -ffunction-sections -fstack-protector-strong -funwind-tables -no-canonical-prefixes --sysroot /Users/brianchan/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -g -Wno-invalid-command-line-argument -Wno-unused-command-line-argument -fno-addrsig -fpic -mfpu\u003dvfpv3-d16 -march\u003darmv7-a -mthumb -O0 -UNDEBUG -fno-limit-debug-info -I/Users/brianchan/Desktop/StockNotifier-Frontend/android/app/src/main/jni/cincludes/armv7/ -I/Users/brianchan/Library/Android/sdk/ndk-bundle/build/core -DANDROID -Wa,--noexecstack -Wformat -Werror\u003dformat-security"
         }
       ],
-      "output": "D:\\cs130\\StockNotifier-Frontend\\android\\app\\build\\intermediates\\ndkBuild\\debug\\obj\\local\\armeabi-v7a\\liblogin_client.so"
+      "output": "/Users/brianchan/Desktop/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/obj/local/armeabi-v7a/liblogin_client.so"
     }
   },
   "toolchains": {
     "toolchain-armeabi-v7a": {
-      "cCompilerExecutable": "C:\\Users\\Vincent\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\build\\..\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe"
+      "cCompilerExecutable": "/Users/brianchan/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang"
     }
   },
   "cFileExtensions": [
