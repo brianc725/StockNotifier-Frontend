@@ -95,6 +95,8 @@ export async function register(username, password) {
 
 
 export async function login(username, password) {
+  console.log('client log ', ClientLogin);
+
   got_salt = await fetchWithTimeout(routes.login.get_salt, generateMessage({
     'username': username,
   })).then(function(response) {
