@@ -27,6 +27,17 @@ $ react-native link
 ```
 $ flask run
 ```
+- Set PROJECT_ROOT Variable 
+    - CD into the base of the repository
+```
+export PROJECT_ROOT=$(pwd)
+```
+
+- Confirm PROJECT_ROOT is base of repository 
+```
+echo $PROJECT_ROOT
+```
+
 - Run app depending on which platform you would like
 ```
 $ react-native run-ios
