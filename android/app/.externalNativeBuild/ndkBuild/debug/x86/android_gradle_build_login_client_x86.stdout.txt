@@ -1,3 +1,7 @@
 /Users/brianchan/Library/Android/sdk/ndk-bundle/build/core
 /Users/brianchan/Desktop/StockNotifier-Frontend//android/app/src/main/jni/cincludes/x86/
-make: `/Users/brianchan/Desktop/StockNotifier-Frontend/android/app/build/intermediates/ndkBuild/debug/obj/local/x86/liblogin_client.so' is up to date.
+[x86] Compile        : login_client <= com_stock_client_login_ClientBridge.c
+[x86] Compile        : login_client <= client_login.c
+[x86] Prebuilt       : libgmp.so <= /Users/brianchan/Desktop/StockNotifier-Frontend//android/app/src/main/jni/clibs/x86/
+[x86] Prebuilt       : libsodium.so <= /Users/brianchan/Desktop/StockNotifier-Frontend//android/app/src/main/jni/clibs/x86/
+[x86] SharedLibrary  : liblogin_client.so

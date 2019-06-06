@@ -32,6 +32,10 @@ export default styles = StyleSheet.create({
     position: 'absolute',
     bottom: 96,
   },
+  imageContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },  
   input: {
     height: 48,
     width: dimensions.width - 80,
