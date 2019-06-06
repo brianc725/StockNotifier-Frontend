@@ -20,14 +20,6 @@ $ react-native link react-native-svg
 $ react-native link react-native-webview
 $ react-native link
 ```
-
-- Run (Temporary) Local API for StockList page 
-    - Open new terminal window and CD into `./app/Scripts/`
-    - Run the following 
-    - Note: If there's a problem delete `app.pyc`.
-```
-$ flask run
-```
 - Set PROJECT_ROOT Variable 
     - CD into the base of the repository
 ```
@@ -49,6 +41,9 @@ the `react-native run-android` command. To do so, CD into `./app/Scripts/`.
 
     - For Windows run `android-emulator.bat`
     - For MacOS: `./emulator-android-mac.sh`
+- Note: The Android emulator script uses a Pixel 2 running with API Android level 26. 
+You will need to install this ahead of time or you can use a different emulator
+of your choosing and by following the format of the script. 
 
 ## Debugging
 
