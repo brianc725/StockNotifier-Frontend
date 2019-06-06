@@ -1,5 +1,8 @@
 # NEWS
 
+## June 6, 2019
+- Completed project with proper notifications and sounds. 
+
 ## June 5, 2019
 - Completed integration of frontend with the backend
 
