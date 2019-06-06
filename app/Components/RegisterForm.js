@@ -4,7 +4,6 @@ import {
 } from 'react-native';
 import styles, { Colors} from '../styles';
 import PrimaryButton from './PrimaryButton';
-import { register } from '../auth';
 
 export default class RegisterForm extends Component {
 
@@ -34,12 +33,8 @@ export default class RegisterForm extends Component {
     };
   }
 
-  onSignUp = async () => {
-    registered = await register(this.state.fields.username, this.state.fields.password);
-    if (registered) {
-      alert("Registered!");
-      this.props.navigation.navigate('Login');
-    }
+  onSignUp() {
+    alert('not implemented')
   }
 
   validate(username, password, passwordAgain) {
@@ -81,6 +76,8 @@ export default class RegisterForm extends Component {
   }
 
   labelStyle(field) {
+
+
     return {
       position: 'absolute',
       left: 0,
@@ -137,7 +134,6 @@ export default class RegisterForm extends Component {
             autoCorrect={false} 
             keyboardType='email-address'
             returnKeyType="next" 
-            maxLength={79}
           />
           <Text style={styles.errmsg}>{this.errmsg('username', 0)}</Text>
         </View>

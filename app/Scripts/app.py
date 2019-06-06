@@ -1,10 +1,10 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 
 tickers = [
     {
-        'symbol': u'AAPL',
+        'id': u'AAPL',
         'name': u'APPLE INC',
         'price': u'208.48',
         'support': u'200.00',
@@ -13,7 +13,7 @@ tickers = [
         'resistance_strength': u'8',
     },
     {
-        'symbol': u'MSFT',
+        'id': u'MSFT',
         'name': u'Microsoft Corporation',
         'price': u'128.15',
         'support': u'120.00',
@@ -22,7 +22,7 @@ tickers = [
         'resistance_strength': u'8',
     },
     {
-        'symbol': u'COST',
+        'id': u'COST',
         'name': u'Costco Wholesale Corporation',
         'price': u'244.23',
         'support': u'223.00',
@@ -31,7 +31,7 @@ tickers = [
         'resistance_strength': u'8',
     },
     {
-        'symbol': u'BRKA',
+        'id': u'BRKA',
         'name': u'Berkshire Hathaway Inc.',
         'price': u'320,000.00',
         'support': u'318,925.00',
@@ -40,7 +40,7 @@ tickers = [
         'resistance_strength': u'8',
     },
     {
-        'symbol': u'DAL',
+        'id': u'DAL',
         'name': u'Delta Air Lines, Inc.',
         'price': u'57.73',
         'support': u'55.00',
@@ -49,7 +49,7 @@ tickers = [
         'resistance_strength': u'8',
     },
     {
-        'symbol': u'QCOM',
+        'id': u'QCOM',
         'name': u'QUALCOMM Incorporated',
         'price': u'88.25',
         'support': u'85.00',
@@ -58,7 +58,7 @@ tickers = [
         'resistance_strength': u'8',
     },
     {
-        'symbol': u'SEAS',
+        'id': u'SEAS',
         'name': u'SeaWorld Entertainment, Inc.',
         'price': u'26.36',
         'support': u'19.00',
@@ -67,7 +67,7 @@ tickers = [
         'resistance_strength': u'8',
     },
     {
-        'symbol': u'SYMC',
+        'id': u'SYMC',
         'name': u'Symantec Corporation',
         'price': u'23.19',
         'support': u'22.00',
@@ -79,35 +79,35 @@ tickers = [
 
 nyse = [
     {
-        'symbol': u'AAPL',
+        'id': u'AAPL',
         'name': u'APPLE INC',
     },
     {
-        'symbol': u'MSFT',
+        'id': u'MSFT',
         'name': u'Microsoft Corporation',
     },
     {
-        'symbol': u'LB',
+        'id': u'LB',
         'name': u'L Brands, Inc.',
     },
     {
-        'symbol': u'UBER',
+        'id': u'UBER',
         'name': u'Uber Technologies, Inc.',
     },
     {
-        'symbol': u'FB',
+        'id': u'FB',
         'name': u'Facebook, Inc.',
     },
     {
-        'symbol': u'TWTR',
+        'id': u'TWTR',
         'name': u'Twitter, Inc.',
     },
     {
-        'symbol': u'HD',
+        'id': u'HD',
         'name': u'The Home Depot, Inc.',
     },
     {
-        'symbol': u'MGM',
+        'id': u'MGM',
         'name': u'MGM Resorts International',
     },
 ]
@@ -118,35 +118,7 @@ def get_tickers():
 
 @app.route('/nyse', methods=['GET'])
 def all_nyse():
-    return jsonify({'nyse': nyse})
-
-# Developing authentication
-
-@app.route('/register', methods=['POST'])
-def register():
-    print(request.get_json())
-    return jsonify({'user_salt': '69'})
-
-@app.route('/login/get_salt', methods=['POST'])
-def get_salt():
-    print(request.get_json())
-    return jsonify({'user_salt': '69', 'nonce': '1234'})
-
-@app.route('/login/get_b', methods=['POST'])
-def get_b():
-    print(request.get_json())
-    return jsonify({'big_b': '60'})
-
-@app.route('/login/get_m2', methods=['POST'])
-def get_m2():
-    print(request.get_json())
-    return jsonify({'m2': '70'})
-
-
-
-
-
-
+    return jsonify({'nyse': nyse})    
 
 if __name__ == '__main__':
     app.run()

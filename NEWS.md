@@ -1,20 +1,5 @@
 # NEWS
 
-## June 5, 2019
-- Completed integration of frontend with the backend
-
-## June 4, 2019
-- Tested proceudre for registration and login 
-
-## June 3, 2019
-- Reset button logic adjusted in manage tickers, quick press for resetting number of displayed tickers, long press for full refresh of tickers from database.
-
-## June 2, 2019
-- Fetches real data for all of the tickers user can select from 
-- Get notifications and display it to user in app and outside of app
-- Fetches real user data and updated supports and resistances in detailed view
-- Add and Delete functionality for an user actually works now
-
 ## June 1, 2019
 - More efficient Add Symbols list, only displays 20 at a time 
 

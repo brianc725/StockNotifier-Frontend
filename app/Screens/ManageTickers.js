@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-navigation';
 import { Header, SearchBar } from 'react-native-elements'
 import AsyncStorage from '@react-native-community/async-storage';
 import TickerCard from '../Components/TickerCard';
+import PrimaryButton from '../Components/PrimaryButton';
 import { contains } from '../Scripts/Search';
 import _ from 'lodash';
 
@@ -18,7 +19,7 @@ class Hidden extends React.Component {
   }
 }
 
-const NYSE_URL = `http://cs130-stock-notifier-http-server.us-west-1.elasticbeanstalk.com/all_tickers`;
+const NYSE_URL = Platform.OS == 'ios' ? "http://localhost:5000/nyse" : "http://10.0.2.2:5000/nyse"
 const ITEMS_PER_PAGE = 20;
 
 // This class is for adding new stock tickers 
@@ -50,8 +51,8 @@ export default class ManageTickers extends Component {
 
       // Currently data is returned in 'nyse'
       this.setState({
-        tickers: tempJSON,
-        allTickers: tempJSON,
+        tickers: tempJSON.nyse,
+        allTickers: tempJSON.nyse,
       });
     }
     else {
@@ -66,8 +67,8 @@ export default class ManageTickers extends Component {
 
           // Currently data is returned in 'nyse'
           this.setState({
-            tickers: stuff,
-            allTickers: stuff,
+            tickers: stuff.nyse,
+            allTickers: stuff.nyse,
           });
         })
         .catch((error) => { console.log(error); });
@@ -79,7 +80,7 @@ export default class ManageTickers extends Component {
     drawerLabel: <Hidden />,
   };
 
-  _keyExtractor = (item) => item.symbol;
+  _keyExtractor = (item) => item.id;
 
   filterData = () => {
     const { navigation } = this.props;
@@ -88,13 +89,13 @@ export default class ManageTickers extends Component {
 
     // Sort all Tickers
     let sortedTickers = tickers.sort((a, b) => {
-      return a.symbol.toLowerCase() >= b.symbol.toLowerCase();
+      return a.id.toLowerCase() >= b.id.toLowerCase();
     });
 
     // Remove tickers that the user has already added
     // Written by Vincent 
     let removedTickers = sortedTickers.filter(stock =>
-      !userTickers.map(elem => elem.symbol).includes(stock.symbol));
+      !userTickers.map(elem => elem.id).includes(stock.id));
 
     // Limit amount displayed
     let resulting = removedTickers.slice(0, offset * ITEMS_PER_PAGE);
@@ -114,6 +115,7 @@ export default class ManageTickers extends Component {
 
   // Save the current query string from the user 
   handleSearch = search => {
+    // console.log("search", search)
     const formatSearch = search.toLowerCase();
     // Filter for results via contain function
     const tickers = _.filter(this.state.allTickers, item => {
@@ -126,12 +128,6 @@ export default class ManageTickers extends Component {
     this.setState({
       offset: 1,
     });
-  }
-
-  resetClear = () => {
-    AsyncStorage.removeItem('ALL_TICKERS');
-    this.grabData();
-    this.resetOffset();
   }
 
   render() {
@@ -158,7 +154,7 @@ export default class ManageTickers extends Component {
 
       // Array of tickers that were same
       let duplicatedTickers = tickers.filter(stock =>
-        userTickers.map(elem => elem.symbol).includes(stock.symbol));
+        userTickers.map(elem => elem.id).includes(stock.id));
       // Number of tickers remaining that user could add 
       const totalNonUserTickers = tickers.length - duplicatedTickers.length;
 
@@ -169,7 +165,6 @@ export default class ManageTickers extends Component {
               text: 'Reset',
               style: { color: '#fff' },
               onPress: () => this.resetOffset(),
-              onLongPress: () => this.resetClear(),
             }}
             centerComponent={{ 
               text: 'Add Symbols', 
@@ -187,7 +182,7 @@ export default class ManageTickers extends Component {
           <FlatList
             data={displayData}
             renderItem={({ item }) =>
-              <TickerCard id={item.symbol} name={item.name} price={'ADD'} />}
+              <TickerCard id={item.id} name={item.name} price={'ADD'} />}
             keyExtractor={this._keyExtractor}
             ListHeaderComponent={
               <View>

@@ -6,13 +6,13 @@ import styles from '../styles';
 import PrimaryButton from '../Components/PrimaryButton';
 
 export default class Landing extends Component {
+
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.landingInputContainer}>
           <PrimaryButton
-            onPress={() => this.props.navigation.navigate('Register')}>
-              Sign Up
+            onPress={() => this.props.navigation.navigate('Register')}>Sign Up
           </PrimaryButton>
         </View>
       </View>

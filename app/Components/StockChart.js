@@ -15,20 +15,8 @@ class StockChart extends React.PureComponent {
     let { support, resistance, current } = this.props;
 
     // Convert numbers to float. 
-    if (support === undefined) {
-      support = 0;
-    }
-    else {
-      support = parseFloat(support.price);
-    }
-
-    if (resistance === undefined) {
-      resistance = 0;
-    }
-    else {
-      resistance = parseFloat(resistance.price);
-    }
-
+    support = parseFloat(support);
+    resistance = parseFloat(resistance);
     current = parseFloat(current);
 
     // Check if NaN
