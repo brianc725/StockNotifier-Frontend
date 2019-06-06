@@ -7,6 +7,7 @@ import TickerCard from '../Components/TickerCard';
 import { contains } from '../Scripts/Search';
 import { SafeAreaView } from 'react-navigation';
 import { Header, SearchBar, Button } from 'react-native-elements'
+import AsyncStorage from '@react-native-community/async-storage';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Swipeout from 'react-native-swipeout';
 import _ from 'lodash';
@@ -67,10 +68,12 @@ export default class StockList extends Component {
   async grabData() {
     let temp;
 
-    // TODO: load this stuff in from async storage
+    const username = await AsyncStorage.getItem('username');
+    const sessionId  = await AsyncStorage.getItem('session_id');
+
     const body = {
-      username: 'brian',
-      session_id: '0747f11d56c721d49fae05e96abf261c192503b6bf59a2897f069738c3cbe8ff',
+      username: username,
+      session_id: sessionId,
     }
 
     // Fetch the data from the API 
@@ -189,10 +192,12 @@ export default class StockList extends Component {
 
   // Handle the deletion of the ticker 
   async handleDelete(item) {
-    // TODO: load this stuff in from async storage
+    const username = await AsyncStorage.getItem('username');
+    const sessionId  = await AsyncStorage.getItem('session_id');
+
     const body = {
-      username: 'brian',
-      session_id: '0747f11d56c721d49fae05e96abf261c192503b6bf59a2897f069738c3cbe8ff',
+      username: username,
+      session_id: sessionId,
       tickers: [item],
     };
 

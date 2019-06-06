@@ -3,6 +3,7 @@ import {
   Text, View, StyleSheet, Dimensions, ScrollView,
 } from 'react-native';
 import { Header } from 'react-native-elements';
+import AsyncStorage from '@react-native-community/async-storage';
 import StockChart from '../Components/StockChart';
 import SupportResistData from '../Components/SupportResistData';
 

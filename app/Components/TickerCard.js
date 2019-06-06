@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   Text, View, TouchableOpacity, Alert, StyleSheet, Dimensions,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 
 const API_URL = 'http://cs130-stock-notifier-http-server.us-west-1.elasticbeanstalk.com/add_ticker';
@@ -9,13 +10,15 @@ const API_URL = 'http://cs130-stock-notifier-http-server.us-west-1.elasticbeanst
 export default class TickerCard extends Component {
 
   async onAddPress(name) {
-    // TODO: load this stuff in from async storage
+    const username = await AsyncStorage.getItem('username');
+    const sessionId  = await AsyncStorage.getItem('session_id');
+
     const body = {
-      username: 'brian',
-      session_id: '0747f11d56c721d49fae05e96abf261c192503b6bf59a2897f069738c3cbe8ff',
+      username: username,
+      session_id: sessionId,
       tickers: [name],
     };
-
+    
     // Fetch the data from the API 
     await fetch(API_URL, {
       method: 'POST',

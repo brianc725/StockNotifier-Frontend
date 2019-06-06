@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import ClientLogin from './ClientLogin';
-import { isTerminatorless } from '@babel/types';
 
 const domain = 'http://cs130-stock-notifier-http-server.us-west-1.elasticbeanstalk.com/';
 
